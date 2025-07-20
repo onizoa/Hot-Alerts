@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hot Alert - Email Templates</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap'); /* New: Import Montserrat for logo */
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif; /* Updated to Google Font */
+      display: flex;
+      height: 100vh;
+      background: #0f0f0f;
+      color: #e0e0e0;
+    }
+
+    .sidebar {
+      width: 280px;
+      /* Fixed width for the sidebar */
+      min-width: 280px;
+      /* Ensure it doesn't shrink */
+      max-width: 280px;
+      /* Ensure it doesn't expand */
+      background-color: #1c1c1c;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid #2c2c2c;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: bold;
+      color: #00B0F0; /* Updated: Accent color */
+      margin-bottom: 40px;
+      letter-spacing: 1px;
+      text-align: left; /* Updated: Align to left */
+      font-family: 'Montserrat', sans-serif; /* Applied new Google Font */
+      padding-left: 10px; /* Optional: Adjust padding to align with menu if needed */
+    }
+
+    .menu {
+      padding: 0 10px;
+    }
+
+    /* Combined style for both input[type="text"] and select elements */
+    .menu input[type="text"],
+    .menu select {
+      width: calc(110% - 22px);
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #3c3c3c;
+      border-radius: 8px;
+      background: #2a2a2a;
+      color: white;
+      outline: none;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+      line-height: normal;
+      box-sizing: border-box;
+    }
+
+    /* Specific styles for the select (combo box) for custom arrow */
+    .menu select, .card-content select { /* Added .card-content select */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20512%22%3E%3Cpath%20fill%3D%22%23cccccc%22%20d%3D%22M192%20256L64%20128v256l128-128z%22%2F%3E%3C%2Fsvg%3E');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 10px;
+      cursor: pointer;
+    }
+
+    .menu input[type="text"]:focus,
+    .menu select:focus,
+    .card-content select:focus { /* Added .card-content select */
+      border-color: #00B0F0; /* Updated: Accent color */
+      box-shadow: 0 0 8px rgba(0, 176, 240, 0.4); /* Updated: Accent color */
+    }
+
+    .menu input[type="text"]::placeholder {
+      color: #aaa;
+    }
+
+    /* Styles for missing fields */
+    .menu input[type="text"].missing,
+    .menu select.missing,
+    .card-content select.missing { /* Added .card-content select */
+      border: 1px solid #ff4f4f;
+      animation: shake 0.2s 2;
+    }
+
+    /* Styles for filled highlight */
+    .menu input[type="text"].filled-highlight,
+    .menu select.filled-highlight,
+    .card-content select.filled-highlight { /* Added .card-content select */
+      border: 1px solid #4CAF50;
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+    }
+
+    /* NEW: Style for the green flash on clear */
+    .menu input[type="text"].cleared-highlight,
+    .menu select.cleared-highlight,
+    .card-content select.cleared-highlight { /* Added .card-content select */
+      border: 1px solid #00ff00 !important;
+      box-shadow: 0 0 8px rgba(0, 255, 0, 0.6) !important;
+      transition: border 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translateX(0);
+      }
+      25% {
+        transform: translateX(-3px);
+      }
+      50% {
+        transform: translateX(3px);
+      }
+      75% {
+        transform: translateX(-3px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .bottom-user {
+      font-size: 13px;
+      color: #888;
+      padding: 20px 10px 0;
+      border-top: 1px solid #2c2c2c;
+      margin-top: 30px;
+    }
+
+    .main {
+      flex-grow: 1;
+      padding: 0 40px 40px 40px; /* Updated: Removed top padding, handled by search-container */
+      overflow-y: auto;
+      background-color: #121212;
+    }
+
+    /* Search Bar Styles */
+    .search-container {
+      margin-bottom: 24px;
+      display: flex;
+      gap: 10px;
+      /* New properties for sticky positioning */
+      position: sticky; /* Make the search bar sticky */
+      top: 0; /* Stick to the top of its scrollable container */
+      background-color: #121212; /* Match main background to prevent content showing through */
+      z-index: 10; /* Ensure it stays on top of other elements */
+      
+      /* Adjust margins and padding to visually align and stretch background */
+      margin-left: -40px; /* Pull to the left edge of .main's padding */
+      margin-right: -40px; /* Pull to the right edge of .main's padding */
+      padding: 40px 40px 16px 40px; /* top, right, bottom, left padding for the sticky container */
+      width: calc(100% + 80px); /* Extend width to cover compensated margins */
+      box-sizing: border-box; /* Include padding in the width calculation */
+    }
+
+    .search-input {
+      flex-grow: 1;
+      padding: 10px;
+      height: 50px; /* Set height to 50px */
+      font-size: 15px; /* Set font size to 15px */
+      border: 1px solid #3c3c3c;
+      border-radius: 8px;
+      background: #2a2a2a;
+      color: white;
+      outline: none;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+      box-sizing: border-box; /* Ensures padding is included in the height */
+    }
+
+    .search-input:focus {
+      border-color: #00B0F0; /* Updated: Accent color */
+      box-shadow: 0 0 8px rgba(0, 176, 240, 0.4); /* Updated: Accent color */
+    }
+
+    .search-btn {
+      padding: 10px 20px;
+      background: #00B0F0; /* Updated: Accent color */
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .search-btn:hover {
+      background: #0099D0; /* Updated: Darker accent color for hover */
+    }
+    /* End Search Bar Styles */
+
+    .card {
+      background-color: #1f1f1f;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 19px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      color: #00B0F0; /* Updated: Accent color */
+      padding-bottom: 10px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .card-content {
+      margin-top: 20px;
+      /* Animation properties */
+      max-height: 0;
+      /* collapsed state */
+      overflow: hidden;
+      transition: max-height 0.5s ease-in-out;
+      /* Smooth transition */
+    }
+
+    .card-content.expanded {
+      max-height: 500px;
+      /* Expanded state - ensure this is large enough to fit all content */
+    }
+
+    .copy-btn, .clear-btn {
+      padding: 12px 25px;
+      background: #00B0F0; /* Updated: Accent color */
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      /* Fixed width for the copy button */
+      width: 130px;
+      /* Set to 130 pixels */
+      box-sizing: border-box;
+      /* Include padding and border in the width */
+      overflow: hidden;
+      /* Hide overflow if text is too long */
+      text-overflow: ellipsis;
+      /* Add ellipsis if text is too long */
+      white-space: nowrap;
+      /* Prevent text wrapping inside the button */
+    }
+
+    .copy-btn {
+      margin-top: 25px;
+    }
+
+    .clear-btn {
+      margin-top: 10px;
+      width: calc(110% - 22px);
+    }
+
+    .copy-btn:hover:not(:disabled), .clear-btn:hover:not(.active) {
+      background: #0099D0; /* Updated: Darker accent color for hover */
+      transform: translateY(-1px);
+    }
+
+    .copy-btn:disabled {
+      background-color: #555;
+      /* Darker background when disabled */
+      color: #bbb;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .warning {
+      color: #ff4f4f;
+      margin-top: 15px;
+      display: none;
+      font-weight: bold;
+      background-color: #3a1a1a;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .field-name {
+      color: #ff8f8f;
+      font-weight: bold;
+    }
+
+    .template-output {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #ccc;
+      margin-top: 15px;
+      white-space: pre-wrap; /* This ensures text wraps */
+      word-wrap: break-word;
+      /* Ensures long words break and wrap */
+      font-style: italic;
+      background-color: #2a2a2a;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #3c3c3c;
+    }
+
+    .filled {
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .empty {
+      color: #ff4f4f;
+      font-weight: bold;
+    }
+
+    .toggle-icon {
+      font-weight: normal;
+      font-size: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .card h3[aria-expanded="true"] .toggle-icon {
+      transform: rotate(90deg);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div>
+      <div class="logo">Hot Alerts</div> <div class="menu">
+        <select id="customerTitle">
+          <option value="">Select Title</option>
+          <option value="Mr.">Mr.</option>
+          <option value="Mrs.">Mrs.</option>
+        </select>
+        <input type="text" id="phoneNumber" placeholder="Phone Number">
+        <input type="text" id="customerName" placeholder="Customer Name">
+        <input type="text" id="vehicle" placeholder="Vehicle">
+        <input type="text" id="vin" placeholder="VIN">
+        <input type="text" id="advisor" placeholder="Advisor">
+        <input type="text" id="schedule" placeholder="Schedule">
+        <input type="text" id="accessoryParts" placeholder="Accessory / Parts">
+        <input type="text" id="tireBrandSize" placeholder="Tire Brand & Size">
+        <input type="text" id="service" placeholder="Service">
+        <input type="text" id="otherConcern" placeholder="Other Concern">
+        <input type="text" id="recall" placeholder="RECALL">
+        <button class="clear-btn" id="clearAllBtn" onclick="clearTextFields()">Clear All</button>
+      </div>
+    </div>
+    <div class="bottom-user">
+      <p><strong>Nadz Cantos</strong><br>Prestige Dealer Alliance</p>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="search-container">
+      <input type="text" id="cardSearchInput" placeholder="Search cards by tags..." class="search-input">
+      </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Accessory/Parts Install Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]]. [[customerName]] is looking to schedule an appointment regarding an [[accessoryParts]] for their [[vehicle]] - [[vin]].
+You may reach the customer at [[phoneNumber]].
+Please contact your earliest convenience to set an appointment.
+Thank you."></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Cancel DMS Appointment Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,service,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] is requesting to cancel the DMS appointment for their [[vehicle]] 
+– [[vin]], scheduled for [[schedule]], for the following service: [[service]].
+You may reach the customer at [[phoneNumber]].
+Please contact and assist her at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Detailing Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] is looking to 
+schedule a detail for their [[vehicle]] - [[vin]].
+You may reach the customer at [[phoneNumber]].
+Please contact the customer at your earliest convenience to set an appointment.
+Thank you."></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Emergency Walk-ins Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] will be towing in their [[vehicle]] – [[vin]] today, as it 
+is inoperable.
+You may reach the customer at [[phoneNumber]].
+The customer is aware that the vehicle may not be serviced today.
+Thank you"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        General Inquiry Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,otherConcern,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] would like to inquire about [[otherConcern]].
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you."></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Glass Services Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] is looking to schedule an appointment for a glass replacement service 
+([[accessoryParts]]) for their [[vehicle]] – [[vin]].
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience to set an appointment.
+Thank you."></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Keys Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] needs to schedule an appointment for their [[vehicle]] – [[vin]] regarding a 
+replacement key.
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience to set the appointment.
+Thank you."></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Loaner Car Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] is looking to acquire a loaner vehicle as a replacement for 
+their [[vehicle]] – [[vin]], which is scheduled for service at [[schedule]]
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Need Appointment Scheduled Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,service,phoneNumber">
+        <div class="template-output preview" data-template="Good 
+day,
+[[customerTitle]] [[customerName]] needs to 
+schedule an appointment for their [[vehicle]] – [[vin]] for the following service: [[service]].
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Parts Pricing Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] is looking to 
+get a pricing quote for a [[accessoryParts]] for 
+their [[vehicle]] – [[vin]].
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        RECALL - Needs to Scheduled Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,recall,vehicle,vin,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] 
+needs to schedule a recall service ([[recall]]) for 
+their [[vehicle]] – [[vin]].
+You may reach the customer at [[phoneNumber]].
+Please contact the customer to schedule at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        RECALL - Scheduled Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,schedule,recall,vehicle,vin,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] has scheduled an appointment at [[schedule]] for the active recall 
+([[recall]]) on their [[vehicle]] – [[vin]].
+You may reach the customer at [[phoneNumber]].
+Please contact the customer if further scheduling or assistance is needed.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Rental Car Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] is looking to acquire a rental vehicle as a replacement for 
+their [[vehicle]] – [[vin]], which is scheduled for service at [[schedule]].
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Scheduled Appointment Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,service,schedule,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] has scheduled an 
+appointment for their [[vehicle]] – [[vin]] for the following service: [[service]]. The appointment is scheduled at [[schedule]].
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Service Pricing Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,service,vehicle,vin,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] is looking to 
+get a pricing quote for an [[service]] for 
+their [[vehicle]] – [[vin]].
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Shuttle Service Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] is requesting to be contacted regarding a drop-off using the shuttle 
+service.
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Speak with Advisor Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,advisor,vehicle,vin,otherConcern,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] would like to speak with their advisor, [[advisor]], regarding their 
+[[vehicle]] – [[vin]], about [[otherConcern]].
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you."></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Status Check Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,advisor,vehicle,vin,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] would like to receive an update from their advisor, [[advisor]], regarding 
+their [[vehicle]] – [[vin]], which is currently in service.
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Timeframe for Service Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,service,vehicle,vin,schedule,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] is looking 
+to know the rough time estimate of the service: [[service]], for their [[vehicle]] – [[vin]], which is scheduled for service at [[schedule]].
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Tire Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,tireBrandSize,count,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] needs to order a tire for their [[vehicle]] – [[vin]].
+The customer has specified a [[tireBrandSize]] and requires [[count]].
+You may reach the customer at [[phoneNumber]].
+Please contact and assist at your earliest convenience.
+Thank you!"></div>
+        <select id="count" style="width: 180px;
+padding: 10px; border: 1px solid #3c3c3c; border-radius: 8px; background: #2a2a2a; color: white; outline: none; margin-top: 15px;
+margin-bottom: 5px;">
+          <option value="">Number of tires</option> <option value="one tire">one tire</option>
+          <option value="two tires">two tires</option>
+          <option value="three tires">three tires</option>
+          <option value="four tires">four tires</option>
+        </select>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Tow-in Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,otherConcern,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] will be towing in their [[vehicle]] – [[vin]].
+The customer stated that [[otherConcern]]. The customer has been informed that same-day service for tow-ins cannot be guaranteed.
+You may reach the customer at [[phoneNumber]]. Please contact and assist at your earliest convenience.
+Thank you!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Update DMS Appointment Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,service,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] has scheduled an appointment for their [[vehicle]] – [[vin]], for the following service: [[service]], scheduled at [[schedule]].
+We request to cancel the existing DMS appointment for this customer.
+You may reach the customer at [[phoneNumber]] Please contact and assist at your earliest convenience.
+Thank elloou!"></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 onclick="toggleCard(this)">
+        Valet Request Alert
+        <span class="toggle-icon">+</span>
+      </h3>
+      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,service,phoneNumber">
+        <div class="template-output preview" data-template="Good day,
+[[customerTitle]] [[customerName]] is looking to schedule a valet appointment for their [[vehicle]] – [[vin]] with the following service: [[service]].
+You may reach the customer at [[phoneNumber]]. Please contact and assist at your earliest convenience.
+Thank you."></div>
+        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+        <div class="warning"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fieldDisplayNames = {
+      customerTitle: "Customer Title",
+      phoneNumber: "Phone Number",
+      customerName: "Customer Name",
+      vehicle: "Vehicle",
+      vin: "VIN",
+      advisor: "Advisor",
+      schedule: "Schedule",
+      accessoryParts: "Accessory / Parts",
+      tireBrandSize: "Tire Brand & Size",
+      service: "Service",
+      otherConcern: "Other Concern",
+      recall: "RECALL",
+      count: "Count" // Added for the new combo box
+    };
+
+    let isClearingFields = false;
+
+    function toggleCard(header) {
+      const content = header.nextElementSibling;
+      const icon = header.querySelector('.toggle-icon');
+      const isExpanded = content.classList.contains('expanded'); // Check for 'expanded' class
+
+      // Collapse all other cards and clear their state
+      document.querySelectorAll('.card-content').forEach(c => {
+        c.classList.remove('expanded');
+        c.previousElementSibling.querySelector('.toggle-icon').textContent = "+";
+        c.previousElementSibling.removeAttribute('aria-expanded');
+      });
+      removeHighlights();
+
+      if (!isExpanded) {
+        content.classList.add('expanded');
+        icon.textContent = "−";
+        header.setAttribute('aria-expanded', 'true');
+        highlightAndUpdate(content);
+      }
+    }
+
+    function removeHighlights() {
+      // Adjusted to include the new 'count' select element
+      document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
+        element.classList.remove('missing');
+        element.classList.remove('filled-highlight');
+        element.classList.remove('cleared-highlight');
+      });
+      document.querySelectorAll('.card-content .warning').forEach(warning => {
+        warning.style.display = "none";
+      });
+    }
+
+    function highlightAndUpdate(targetCard = null) {
+      document.querySelectorAll('.card-content').forEach(card => {
+        const preview = card.querySelector('.preview');
+        const warning = card.querySelector('.warning');
+        const copyBtn = card.querySelector('.copy-btn'); // Get the copy button for the current card
+
+        if (!preview) return;
+
+        const rawTemplate = preview.getAttribute('data-template');
+        const required = card.getAttribute('data-required').split(',');
+        let allRequiredFilled = true;
+        const missingFields = [];
+
+        if (card === targetCard || targetCard === null) {
+          if (!isClearingFields) {
+            document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
+              element.classList.remove('missing');
+              element.classList.remove('filled-highlight');
+            });
+          }
+
+          const result = rawTemplate.replace(/\[\[(.*?)\]\]/g, (_, fieldId) => {
+            const element = document.getElementById(fieldId);
+            let value = element ? element.value.trim() : '';
+
+            // Special handling for phoneNumber to ensure it's formatted in the output
+            if (fieldId === 'phoneNumber' && value) {
+              // Clean non-digits before formatting for output
+              const digitsOnly = value.replace(/\D/g, '');
+              if (digitsOnly.length === 10) {
+                value = `(${digitsOnly.substring(0, 3)}) ${digitsOnly.substring(3, 6)}-${digitsOnly.substring(6, 10)}`;
+              }
+            }
+
+            if (required.includes(fieldId)) {
+              const isCustomerTitleMissing = (fieldId === 'customerTitle' && value === '');
+              // Check for 'count' select box with empty value or placeholder text
+              const isCountMissing = (fieldId === 'count' && (value === '' || value === 'Number of tires'));
+
+              if (!value || isCustomerTitleMissing || isCountMissing) {
+                allRequiredFilled = false;
+                missingFields.push(fieldId);
+                if (element && !isClearingFields) {
+                  element.classList.add('missing');
+                }
+              } else {
+                if (element) {
+                  element.classList.remove('missing');
+                  if (!isClearingFields) {
+                    element.classList.add('filled-highlight');
+                  }
+                }
+              }
+            } else if (element) {
+              element.classList.remove('missing');
+              element.classList.remove('filled-highlight');
+            }
+
+            // Updated check for count placeholder
+            if (!value || (fieldId === 'customerTitle' && value === '') || (fieldId === 'count' && (value === '' || value === 'Number of tires'))) {
+              return `<span class="empty">[EMPTY]</span>`;
+            }
+            return `<span class="filled">${value}</span>`;
+          });
+
+          preview.innerHTML = result;
+
+          if (!allRequiredFilled) {
+            const fieldNames = missingFields.map(f => `<span class="field-name">${fieldDisplayNames[f] || f}</span>`).join(', ');
+            warning.innerHTML = `⚠️ Please fill in all required fields: ${fieldNames}`;
+            if (!isClearingFields) {
+              warning.style.display = "block";
+            } else {
+              warning.style.display = "none";
+            }
+            if (copyBtn) copyBtn.disabled = true; // Disable if required fields are empty
+          } else {
+            warning.style.display = "none";
+            if (copyBtn) copyBtn.disabled = false; // Enable if all required fields are filled
+          }
+        } else {
+          warning.style.display = "none";
+          // If not the target card, ensure copy button is enabled if its fields are filled (re-evaluate)
+          // This re-evaluation logic is handled by highlightAndUpdate(null) or other calls
+        }
+      });
+    }
+
+    function clearTextFields() {
+      isClearingFields = true; // Set flag to true
+
+      document.getElementById('customerTitle').value = "";
+      document.getElementById('phoneNumber').value = "";
+      document.getElementById('customerName').value = "";
+      document.getElementById('vehicle').value = "";
+      document.getElementById('vin').value = "";
+      document.getElementById('advisor').value = "";
+      document.getElementById('schedule').value = "";
+      document.getElementById('accessoryParts').value = "";
+      document.getElementById('tireBrandSize').value = "";
+      document.getElementById('service').value = "";
+      document.getElementById('otherConcern').value = "";
+      document.getElementById('recall').value = "";
+
+      // Also clear the 'count' select box if it exists
+      const countSelect = document.getElementById('count');
+      if (countSelect) {
+        countSelect.value = "";
+      }
+
+      document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
+        element.classList.remove('missing');
+        element.classList.remove('filled-highlight');
+        // Add cleared-highlight class
+        element.classList.add('cleared-highlight');
+        // Remove it after a short delay
+        setTimeout(() => {
+          element.classList.remove('cleared-highlight');
+        }, 1000);
+      });
+
+      removeHighlights();
+      highlightAndUpdate(null); // Update all cards after clearing
+
+      isClearingFields = false; // Reset flag
+    }
+
+
+    // Search functionality
+    const searchTags = [
+      "accessory", "appointment", "advisor", "cancel", "car", "check", "detailing", "dms", "emergency", "glass", "general", "inquiry", "install", "keys", "loaner", "need", "parts", "pricing", "recall", "rental", "request", "scheduled", "service", "shuttle", "status", "timeframe", "tire", "tow", "update", "valet", "vehicle", "walk"
+    ];
+
+    function normalizeCardTitle(title) {
+      return title.toLowerCase().replace(/ alert/g, '').replace(/-/g, '').trim();
+    }
+
+    function filterCards() {
+      const searchTerm = document.getElementById('cardSearchInput').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.card');
+
+      cards.forEach(card => {
+        const cardTitle = card.querySelector('h3').textContent;
+        const normalizedCardTitle = normalizeCardTitle(cardTitle);
+        let isMatch = false;
+
+        if (searchTerm === "") {
+          isMatch = true; // Show all cards if search term is empty
+        } else {
+          // Check if the normalized card title contains the search term directly
+          if (normalizedCardTitle.includes(searchTerm)) {
+            isMatch = true;
+          } else {
+            // Check if any of the predefined search tags are present in the card title
+            // AND the search term is a substring of that tag or vice-versa.
+            isMatch = searchTags.some(tag => {
+              return normalizedCardTitle.includes(tag) && (tag.includes(searchTerm) || searchTerm.includes(tag));
+            });
+          }
+        }
+
+        if (isMatch) {
+          card.style.display = 'block'; // Show the card
+        } else {
+          card.style.display = 'none'; // Hide the card
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Existing event listeners for input fields
+      const phoneNumberInput = document.getElementById('phoneNumber');
+      if (phoneNumberInput) {
+        phoneNumberInput.addEventListener('input', function(e) {
+            const input = e.target;
+            let value = input.value.replace(/\D/g, ''); // Remove non-digits
+
+            if (value.length > 10) {
+                value = value.substring(0, 10); // Limit to 10 digits
+            }
+
+            let formattedValue = '';
+            if (value.length > 0) {
+                formattedValue = '(' + value.substring(0, 3);
+            }
+            if (value.length >= 4) {
+                formattedValue += ') ' + value.substring(3, 6);
+            }
+            if (value.length >= 7) {
+                formattedValue += '-' + value.substring(6, 10);
+            }
+            input.value = formattedValue;
+
+            // Trigger update for active card
+            if (!isClearingFields) {
+                const openCard = document.querySelector('.card-content.expanded');
+                if (openCard) {
+                    highlightAndUpdate(openCard);
+                } else {
+                    // Update all cards if no specific one is expanded
+                    document.querySelectorAll('.card-content').forEach(card => highlightAndUpdate(card));
+                }
+            }
+        });
+      }
+      
+      // Event listeners for all input and select elements in the .menu and .card-content select#count
+      document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
+          element.addEventListener('input', function() {
+              const openCard = document.querySelector('.card-content.expanded');
+              if (openCard) {
+                  highlightAndUpdate(openCard);
+              } else {
+                  document.querySelectorAll('.card-content').forEach(card => highlightAndUpdate(card));
+              }
+          });
+          element.addEventListener('change', function() { // Added for select elements
+              const openCard = document.querySelector('.card-content.expanded');
+              if (openCard) {
+                  highlightAndUpdate(openCard);
+              } else {
+                  document.querySelectorAll('.card-content').forEach(card => highlightAndUpdate(card));
+              }
+          });
+      });
+
+      removeHighlights();
+      // Initial check for copy button disabled state on load
+      document.querySelectorAll('.card-content').forEach(card => highlightAndUpdate(card));
+
+      // Search bar event listeners
+      const cardSearchInput = document.getElementById('cardSearchInput');
+      // Removed: const searchButton = document.getElementById('searchButton');
+
+      if (cardSearchInput) {
+        cardSearchInput.addEventListener('keyup', filterCards);
+        filterCards(); // Initial filter to show all cards
+      }
+      // Removed: if (searchButton) { searchButton.addEventListener('click', filterCards); }
+    });
+  </script>
+</body>
+</html>
