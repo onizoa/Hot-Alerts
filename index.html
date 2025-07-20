@@ -768,297 +768,293 @@ Thank you."></div>
   </div>
 
   <script>
-    const fieldDisplayNames = {
-      customerTitle: "Customer Title",
-      phoneNumber: "Phone Number",
-      customerName: "Customer Name",
-      vehicle: "Vehicle",
-      vin: "VIN",
-      advisor: "Advisor",
-      schedule: "Schedule",
-      accessoryParts: "Accessory / Parts",
-      tireBrandSize: "Tire Brand & Size",
-      service: "Service",
-      otherConcern: "Other Concern",
-      recall: "RECALL",
-      count: "Count" // Added for the new combo box
-    };
+   const fieldDisplayNames = {
+  customerTitle: "Customer Title",
+  phoneNumber: "Phone Number",
+  customerName: "Customer Name",
+  vehicle: "Vehicle",
+  vin: "VIN",
+  advisor: "Advisor",
+  schedule: "Schedule",
+  accessoryParts: "Accessory / Parts",
+  tireBrandSize: "Tire Brand & Size",
+  service: "Service",
+  otherConcern: "Other Concern",
+  recall: "RECALL",
+  count: "Count" // Added for the new combo box
+};
 
-    let isClearingFields = false;
+let isClearingFields = false;
 
-    function toggleCard(header) {
-      const content = header.nextElementSibling;
-      const icon = header.querySelector('.toggle-icon');
-      const isExpanded = content.classList.contains('expanded'); // Check for 'expanded' class
+function toggleCard(header) {
+  const content = header.nextElementSibling;
+  const icon = header.querySelector('.toggle-icon');
+  const isExpanded = content.classList.contains('expanded');
 
-      // Collapse all other cards and clear their state
-      document.querySelectorAll('.card-content').forEach(c => {
-        c.classList.remove('expanded');
-        c.previousElementSibling.querySelector('.toggle-icon').textContent = "+";
-        c.previousElementSibling.removeAttribute('aria-expanded');
-      });
-      removeHighlights();
+  // Collapse all other cards and clear their state
+  document.querySelectorAll('.card-content').forEach(c => {
+    if (c !== content) { // Don't process the current card yet
+      c.classList.remove('expanded');
+      c.previousElementSibling.querySelector('.toggle-icon').textContent = "+";
+      c.previousElementSibling.removeAttribute('aria-expanded');
+      updateCardDisplay(c, false); // Update collapsed cards (no highlights)
+    }
+  });
+  removeHighlights(); // This clears all field highlights from the sidebar
 
-      if (!isExpanded) {
-        content.classList.add('expanded');
-        icon.textContent = "−";
-        header.setAttribute('aria-expanded', 'true');
-        highlightAndUpdate(content);
+  if (!isExpanded) { // If the card is NOT currently expanded (i.e., it's collapsed)
+    content.classList.add('expanded'); // EXPAND IT
+    icon.textContent = "−";
+    header.setAttribute('aria-expanded', 'true');
+    updateCardDisplay(content, true); // Update and highlight for the newly expanded card
+  } else { // If the card IS currently expanded -> COLLAPSE IT
+    content.classList.remove('expanded');
+    icon.textContent = "+";
+    header.removeAttribute('aria-expanded');
+    updateCardDisplay(content, false); // Update the now collapsed card (no highlights)
+  }
+}
+
+function removeHighlights() {
+  // Adjusted to include the new 'count' select element
+  document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
+    element.classList.remove('missing');
+    element.classList.remove('filled-highlight');
+    element.classList.remove('cleared-highlight');
+  });
+  // REMOVED: document.querySelectorAll('.card-content .warning').forEach(warning => { warning.style.display = "none"; });
+  // The warning's display is now managed by updateCardDisplay and CSS transitions.
+}
+
+// NEW FUNCTION: Updates a single card's display (preview, warning, copy button)
+// and conditionally highlights input fields if isCurrentlyExpanded is true.
+function updateCardDisplay(card, isCurrentlyExpanded) {
+  const preview = card.querySelector('.preview');
+  const warning = card.querySelector('.warning');
+  const copyBtn = card.querySelector('.copy-btn');
+  if (!preview) return;
+
+  const rawTemplate = preview.getAttribute('data-template');
+  const required = card.getAttribute('data-required').split(',');
+  let allRequiredFilled = true;
+  const missingFields = [];
+
+  // Reset highlights for fields relevant to this card's requirements, but only if
+  // this card is the one being actively expanded/updated OR if we are clearing fields.
+  if (isCurrentlyExpanded || isClearingFields) {
+    required.forEach(fieldId => {
+      const element = document.getElementById(fieldId);
+      if (element) {
+        element.classList.remove('missing');
+        element.classList.remove('filled-highlight');
+      }
+    });
+  }
+
+  const result = rawTemplate.replace(/\[\[(.*?)\]\]/g, (_, fieldId) => {
+    const element = document.getElementById(fieldId);
+    let value = element ? element.value.trim() : '';
+
+    // Phone number formatting
+    if (fieldId === 'phoneNumber' && value) {
+      const digitsOnly = value.replace(/\D/g, '');
+      if (digitsOnly.length === 10) {
+        value = `(${digitsOnly.substring(0, 3)}) ${digitsOnly.substring(3, 6)}-${digitsOnly.substring(6, 10)}`;
       }
     }
 
-    function removeHighlights() {
-      // Adjusted to include the new 'count' select element
-      document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
-        element.classList.remove('missing');
-        element.classList.remove('filled-highlight');
-        element.classList.remove('cleared-highlight');
-      });
-      document.querySelectorAll('.card-content .warning').forEach(warning => {
-        warning.style.display = "none";
-      });
-    }
+    if (required.includes(fieldId)) {
+      const isCustomerTitleMissing = (fieldId === 'customerTitle' && value === '');
+      const isCountMissing = (fieldId === 'count' && (value === '' || value === 'Number of tires'));
 
-    function highlightAndUpdate(targetCard = null) {
-      document.querySelectorAll('.card-content').forEach(card => {
-        const preview = card.querySelector('.preview');
-        const warning = card.querySelector('.warning');
-        const copyBtn = card.querySelector('.copy-btn'); // Get the copy button for the current card
-
-        if (!preview) return;
-
-        const rawTemplate = preview.getAttribute('data-template');
-        const required = card.getAttribute('data-required').split(',');
-        let allRequiredFilled = true;
-        const missingFields = [];
-
-        if (card === targetCard || targetCard === null) {
-          if (!isClearingFields) {
-            document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
-              element.classList.remove('missing');
-              element.classList.remove('filled-highlight');
-            });
-          }
-
-          const result = rawTemplate.replace(/\[\[(.*?)\]\]/g, (_, fieldId) => {
-            const element = document.getElementById(fieldId);
-            let value = element ? element.value.trim() : '';
-
-            // Special handling for phoneNumber to ensure it's formatted in the output
-            if (fieldId === 'phoneNumber' && value) {
-              // Clean non-digits before formatting for output
-              const digitsOnly = value.replace(/\D/g, '');
-              if (digitsOnly.length === 10) {
-                value = `(${digitsOnly.substring(0, 3)}) ${digitsOnly.substring(3, 6)}-${digitsOnly.substring(6, 10)}`;
-              }
-            }
-
-            if (required.includes(fieldId)) {
-              const isCustomerTitleMissing = (fieldId === 'customerTitle' && value === '');
-              // Check for 'count' select box with empty value or placeholder text
-              const isCountMissing = (fieldId === 'count' && (value === '' || value === 'Number of tires'));
-
-              if (!value || isCustomerTitleMissing || isCountMissing) {
-                allRequiredFilled = false;
-                missingFields.push(fieldId);
-                if (element && !isClearingFields) {
-                  element.classList.add('missing');
-                }
-              } else {
-                if (element) {
-                  element.classList.remove('missing');
-                  if (!isClearingFields) {
-                    element.classList.add('filled-highlight');
-                  }
-                }
-              }
-            } else if (element) {
-              element.classList.remove('missing');
-              element.classList.remove('filled-highlight');
-            }
-
-            // Updated check for count placeholder
-            if (!value || (fieldId === 'customerTitle' && value === '') || (fieldId === 'count' && (value === '' || value === 'Number of tires'))) {
-              return `<span class="empty">[EMPTY]</span>`;
-            }
-            return `<span class="filled">${value}</span>`;
-          });
-
-          preview.innerHTML = result;
-
-          if (!allRequiredFilled) {
-            const fieldNames = missingFields.map(f => `<span class="field-name">${fieldDisplayNames[f] || f}</span>`).join(', ');
-            warning.innerHTML = `⚠️ Please fill in all required fields: ${fieldNames}`;
-            if (!isClearingFields) {
-              warning.style.display = "block";
-            } else {
-              warning.style.display = "none";
-            }
-            if (copyBtn) copyBtn.disabled = true; // Disable if required fields are empty
-          } else {
-            warning.style.display = "none";
-            if (copyBtn) copyBtn.disabled = false; // Enable if all required fields are filled
-          }
-        } else {
-          warning.style.display = "none";
-          // If not the target card, ensure copy button is enabled if its fields are filled (re-evaluate)
-          // This re-evaluation logic is handled by highlightAndUpdate(null) or other calls
+      if (!value || isCustomerTitleMissing || isCountMissing) {
+        allRequiredFilled = false;
+        missingFields.push(fieldId);
+        if (element && isCurrentlyExpanded && !isClearingFields) { // ONLY highlight if expanded and not clearing
+          element.classList.add('missing');
         }
-      });
-    }
-
-    function clearTextFields() {
-      isClearingFields = true; // Set flag to true
-
-      document.getElementById('customerTitle').value = "";
-      document.getElementById('phoneNumber').value = "";
-      document.getElementById('customerName').value = "";
-      document.getElementById('vehicle').value = "";
-      document.getElementById('vin').value = "";
-      document.getElementById('advisor').value = "";
-      document.getElementById('schedule').value = "";
-      document.getElementById('accessoryParts').value = "";
-      document.getElementById('tireBrandSize').value = "";
-      document.getElementById('service').value = "";
-      document.getElementById('otherConcern').value = "";
-      document.getElementById('recall').value = "";
-
-      // Also clear the 'count' select box if it exists
-      const countSelect = document.getElementById('count');
-      if (countSelect) {
-        countSelect.value = "";
+      } else {
+        if (element && isCurrentlyExpanded && !isClearingFields) { // ONLY highlight if expanded and not clearing
+          element.classList.add('filled-highlight');
+        }
       }
-
-      document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
-        element.classList.remove('missing');
-        element.classList.remove('filled-highlight');
-        // Add cleared-highlight class
-        element.classList.add('cleared-highlight');
-        // Remove it after a short delay
-        setTimeout(() => {
-          element.classList.remove('cleared-highlight');
-        }, 1000);
-      });
-
-      removeHighlights();
-      highlightAndUpdate(null); // Update all cards after clearing
-
-      isClearingFields = false; // Reset flag
     }
+    // Fields not 'required' by this card will not have 'missing' or 'filled-highlight' applied by this function.
+    // Global `removeHighlights()` on toggle/clear ensures general cleanup.
 
-
-    // Search functionality
-    const searchTags = [
-      "accessory", "appointment", "advisor", "cancel", "car", "check", "detailing", "dms", "emergency", "glass", "general", "inquiry", "install", "keys", "loaner", "need", "parts", "pricing", "recall", "rental", "request", "scheduled", "service", "shuttle", "status", "timeframe", "tire", "tow", "update", "valet", "vehicle", "walk"
-    ];
-
-    function normalizeCardTitle(title) {
-      return title.toLowerCase().replace(/ alert/g, '').replace(/-/g, '').trim();
+    if (!value || (fieldId === 'customerTitle' && value === '') || (fieldId === 'count' && (value === '' || value === 'Number of tires'))) {
+      return `<span class="empty">[EMPTY]</span>`;
     }
+    return `<span class="filled">${value}</span>`;
+  });
 
-    function filterCards() {
-      const searchTerm = document.getElementById('cardSearchInput').value.toLowerCase().trim();
-      const cards = document.querySelectorAll('.card');
+  preview.innerHTML = result;
 
-      cards.forEach(card => {
-        const cardTitle = card.querySelector('h3').textContent;
-        const normalizedCardTitle = normalizeCardTitle(cardTitle);
-        let isMatch = false;
-
-        if (searchTerm === "") {
-          isMatch = true; // Show all cards if search term is empty
-        } else {
-          // Check if the normalized card title contains the search term directly
-          if (normalizedCardTitle.includes(searchTerm)) {
-            isMatch = true;
-          } else {
-            // Check if any of the predefined search tags are present in the card title
-            // AND the search term is a substring of that tag or vice-versa.
-            isMatch = searchTags.some(tag => {
-              return normalizedCardTitle.includes(tag) && (tag.includes(searchTerm) || searchTerm.includes(tag));
-            });
-          }
-        }
-
-        if (isMatch) {
-          card.style.display = 'block'; // Show the card
-        } else {
-          card.style.display = 'none'; // Hide the card
-        }
-      });
+  if (!allRequiredFilled) {
+    const fieldNames = missingFields.map(f => `<span class="field-name">${fieldDisplayNames[f] || f}</span>`).join(', ');
+    warning.innerHTML = `⚠️ Please fill in all required fields: ${fieldNames}`;
+    if (isCurrentlyExpanded && !isClearingFields) { // Show warning only if expanded and not clearing
+      warning.style.display = "block";
     }
+    // No 'else' here to set display: none, allowing CSS transition to hide it on collapse
+    if (copyBtn) copyBtn.disabled = true;
+  } else {
+    warning.style.display = "none"; // This remains, as it correctly hides the warning when fields ARE filled.
+    if (copyBtn) copyBtn.disabled = false;
+  }
+}
 
-    document.addEventListener('DOMContentLoaded', function() {
-      // Existing event listeners for input fields
-      const phoneNumberInput = document.getElementById('phoneNumber');
-      if (phoneNumberInput) {
-        phoneNumberInput.addEventListener('input', function(e) {
-            const input = e.target;
-            let value = input.value.replace(/\D/g, ''); // Remove non-digits
+// NEW FUNCTION: Updates all card previews and copy button states without highlighting fields red.
+// Used on initial load and after clearing fields.
+function updateAllCardPreviewsAndButtons() {
+  document.querySelectorAll('.card-content').forEach(card => {
+    updateCardDisplay(card, false); // Call with isCurrentlyExpanded = false (no red highlights)
+  });
+}
 
-            if (value.length > 10) {
-                value = value.substring(0, 10); // Limit to 10 digits
-            }
+function clearTextFields() {
+  isClearingFields = true;
 
-            let formattedValue = '';
-            if (value.length > 0) {
-                formattedValue = '(' + value.substring(0, 3);
-            }
-            if (value.length >= 4) {
-                formattedValue += ') ' + value.substring(3, 6);
-            }
-            if (value.length >= 7) {
-                formattedValue += '-' + value.substring(6, 10);
-            }
-            input.value = formattedValue;
+  document.getElementById('customerTitle').value = "";
+  document.getElementById('phoneNumber').value = "";
+  document.getElementById('customerName').value = "";
+  document.getElementById('vehicle').value = "";
+  document.getElementById('vin').value = "";
+  document.getElementById('advisor').value = "";
+  document.getElementById('schedule').value = "";
+  document.getElementById('accessoryParts').value = "";
+  document.getElementById('tireBrandSize').value = "";
+  document.getElementById('service').value = "";
+  document.getElementById('otherConcern').value = "";
+  document.getElementById('recall').value = "";
 
-            // Trigger update for active card
-            if (!isClearingFields) {
-                const openCard = document.querySelector('.card-content.expanded');
-                if (openCard) {
-                    highlightAndUpdate(openCard);
-                } else {
-                    // Update all cards if no specific one is expanded
-                    document.querySelectorAll('.card-content').forEach(card => highlightAndUpdate(card));
-                }
-            }
+  const countSelect = document.getElementById('count');
+  if (countSelect) {
+    countSelect.value = "";
+  }
+
+  document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
+    element.classList.remove('missing');
+    element.classList.remove('filled-highlight');
+    element.classList.add('cleared-highlight');
+    setTimeout(() => {
+      element.classList.remove('cleared-highlight');
+    }, 1000);
+  });
+
+  removeHighlights(); // Ensure all highlights are removed from sidebar inputs
+  updateAllCardPreviewsAndButtons(); // Update all cards' previews and buttons without highlighting fields red
+
+  isClearingFields = false;
+}
+
+
+// Search functionality
+const searchTags = [
+  "accessory", "appointment", "advisor", "cancel", "car", "check", "detailing", "dms", "emergency", "glass", "general", "inquiry", "install", "keys", "loaner", "need", "parts", "pricing", "recall", "rental", "request", "scheduled", "service", "shuttle", "status", "timeframe", "tire", "tow", "update", "valet", "vehicle", "walk"
+];
+
+function normalizeCardTitle(title) {
+  return title.toLowerCase().replace(/ alert/g, '').replace(/-/g, '').trim();
+}
+
+function filterCards() {
+  const searchTerm = document.getElementById('cardSearchInput').value.toLowerCase().trim();
+  const cards = document.querySelectorAll('.card');
+
+  cards.forEach(card => {
+    const cardTitle = card.querySelector('h3').textContent;
+    const normalizedCardTitle = normalizeCardTitle(cardTitle);
+    let isMatch = false;
+
+    if (searchTerm === "") {
+      isMatch = true; // Show all cards if search term is empty
+    } else {
+      // Check if the normalized card title contains the search term directly
+      if (normalizedCardTitle.includes(searchTerm)) {
+        isMatch = true;
+      } else {
+        // Check if any of the predefined search tags are present in the card title
+        // AND the search term is a substring of that tag or vice-versa.
+        isMatch = searchTags.some(tag => {
+          return normalizedCardTitle.includes(tag) && (tag.includes(searchTerm) || searchTerm.includes(tag));
         });
       }
-      
-      // Event listeners for all input and select elements in the .menu and .card-content select#count
-      document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
-          element.addEventListener('input', function() {
-              const openCard = document.querySelector('.card-content.expanded');
-              if (openCard) {
-                  highlightAndUpdate(openCard);
-              } else {
-                  document.querySelectorAll('.card-content').forEach(card => highlightAndUpdate(card));
-              }
-          });
-          element.addEventListener('change', function() { // Added for select elements
-              const openCard = document.querySelector('.card-content.expanded');
-              if (openCard) {
-                  highlightAndUpdate(openCard);
-              } else {
-                  document.querySelectorAll('.card-content').forEach(card => highlightAndUpdate(card));
-              }
-          });
-      });
+    }
 
-      removeHighlights();
-      // Initial check for copy button disabled state on load
-      document.querySelectorAll('.card-content').forEach(card => highlightAndUpdate(card));
+    if (isMatch) {
+      card.style.display = 'block'; // Show the card
+    } else {
+      card.style.display = 'none'; // Hide the card
+    }
+  });
+}
 
-      // Search bar event listeners
-      const cardSearchInput = document.getElementById('cardSearchInput');
-      // Removed: const searchButton = document.getElementById('searchButton');
-
-      if (cardSearchInput) {
-        cardSearchInput.addEventListener('keyup', filterCards);
-        filterCards(); // Initial filter to show all cards
+document.addEventListener('DOMContentLoaded', function() {
+  // Existing event listener for phone number input (remains largely the same)
+  const phoneNumberInput = document.getElementById('phoneNumber');
+  if (phoneNumberInput) {
+    phoneNumberInput.addEventListener('input', function(e) {
+      const input = e.target;
+      let value = input.value.replace(/\D/g, ''); // Remove non-digits
+      if (value.length > 10) {
+        value = value.substring(0, 10);
       }
-      // Removed: if (searchButton) { searchButton.addEventListener('click', filterCards); }
+      let formattedValue = '';
+      if (value.length > 0) {
+        formattedValue = '(' + value.substring(0, 3);
+      }
+      if (value.length >= 4) {
+        formattedValue += ') ' + value.substring(3, 6);
+      }
+      if (value.length >= 7) {
+        formattedValue += '-' + value.substring(6, 10);
+      }
+      input.value = formattedValue;
+
+      // Update active card's display or all previews if no card is open
+      if (!isClearingFields) {
+        const openCard = document.querySelector('.card-content.expanded');
+        if (openCard) {
+          updateCardDisplay(openCard, true); // Update and highlight the active card
+        } else {
+          updateAllCardPreviewsAndButtons(); // Update all previews and buttons if no card is open
+        }
+      }
     });
+  }
+
+  // Event listeners for all other input and select elements in the .menu and .card-content select#count
+  document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
+    element.addEventListener('input', function() {
+      const openCard = document.querySelector('.card-content.expanded');
+      if (openCard) {
+        updateCardDisplay(openCard, true); // Update and highlight the active card
+      } else {
+        updateAllCardPreviewsAndButtons(); // Update all previews and buttons if no card is open
+      }
+    });
+    element.addEventListener('change', function() { // Added for select elements
+      const openCard = document.querySelector('.card-content.expanded');
+      if (openCard) {
+        updateCardDisplay(openCard, true); // Update and highlight the active card
+      } else {
+        updateAllCardPreviewsAndButtons(); // Update all previews and buttons if no card is open
+      }
+    });
+  });
+
+  // IMPORTANT INITIALIZATION ON LOAD:
+  removeHighlights(); // Ensures no red/green highlights are present initially
+  updateAllCardPreviewsAndButtons(); // Updates all card previews and disables copy buttons if fields are empty, without applying red highlights to fields.
+
+  // Search bar event listeners
+  const cardSearchInput = document.getElementById('cardSearchInput');
+  if (cardSearchInput) {
+    cardSearchInput.addEventListener('keyup', filterCards);
+    filterCards(); // Initial filter to show all cards
+  }
+});
   </script>
 </body>
 </html>
