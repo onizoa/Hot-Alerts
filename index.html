@@ -6,7 +6,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="./images/Hot Alerts Logo.png">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap'); /* New: Import Montserrat for logo */
+    /*@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap'); ---old*/ 
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');/* New: Import Montserrat for logo */
 
     body {
       margin: 0;
@@ -32,19 +33,36 @@
       border-right: 1px solid #2c2c2c;
       box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     }
+    .montserrat-<uniquifier> {
+        font-family: "Montserrat", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: <weight>;
+        font-style: normal;
+      }
 
     .logo {
-      font-size: 26px;
-      font-weight: bold;
+      font-size: 30px;
+      font-weight: 600;
       color: #00B0F0; /* Updated: Accent color */
       margin-bottom: 40px;
       letter-spacing: 1px;
       text-align: left; /* Updated: Align to left */
-      font-family: 'ModernWarfare'; /*Update*/
-      src: url('https://raw.githubusercontent.com/onizoa/Hot-Alerts/main/fonts/ModernWarfare-8MM6z.ttf') format('truetype');
       font-style: normal;/*Update*/
       font-display: swap; /*Update*/
-      /*font-family: 'Montserrat', sans-serif; /* Applied new Google Font */
+      font-family: "Montserrat", sans-serif;
+      padding-left: 10px; /* Optional: Adjust padding to align with menu if needed */
+    }
+
+    .sublogo {
+      font-size: 18px;
+      font-weight: 300;
+      color: #00B0F0; /* Updated: Accent color */
+      margin-bottom: 40px;
+      letter-spacing: 1px;
+      text-align: left; /* Updated: Align to left */
+      font-style: normal;/*Update*/
+      font-display: swap; /*Update*/
+      font-family: "Montserrat", sans-serif;
       padding-left: 10px; /* Optional: Adjust padding to align with menu if needed */
     }
 
@@ -343,7 +361,7 @@
 
   <div class="sidebar">
     <div>
-      <div class="logo">Hot Alerts</div> 
+      <div class="logo">Hot Alerts</div>
       <div class="menu">
         <select id="customerTitle">
           <option value="">Select Title</option>
