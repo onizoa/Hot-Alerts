@@ -339,7 +339,8 @@
 
   <div class="sidebar">
     <div>
-      <div class="logo">Hot Alerts</div> <div class="menu">
+      <div class="logo">Hot Alerts</div> 
+      <div class="menu">
         <select id="customerTitle">
           <option value="">Select Title</option>
           <option value="Mr.">Mr.</option>
@@ -914,6 +915,11 @@ function updateAllCardPreviewsAndButtons() {
 
 function clearTextFields() {
   isClearingFields = true;
+  const clearButton = document.getElementById('clearAllBtn');
+  const originalButtonText = clearButton.textContent;
+
+  // Change button text to "Cleared!"
+  clearButton.textContent = "Cleared!";
 
   document.getElementById('customerTitle').value = "";
   document.getElementById('phoneNumber').value = "";
@@ -945,7 +951,38 @@ function clearTextFields() {
   removeHighlights(); // Ensure all highlights are removed from sidebar inputs
   updateAllCardPreviewsAndButtons(); // Update all cards' previews and buttons without highlighting fields red
 
+  setTimeout(() => {
+    clearButton.textContent = originalButtonText; // Revert button text after 1 second
+  }, 1000);
+
   isClearingFields = false;
+}
+
+// Function to copy template content
+function copyTemplate(button) {
+  // Only proceed if the button is not disabled
+  if (button.disabled) {
+    return;
+  }
+
+  const cardContent = button.closest('.card-content');
+  const templateOutput = cardContent.querySelector('.template-output');
+  
+  // Create a temporary textarea to hold the text to be copied
+  const tempTextArea = document.createElement('textarea');
+  tempTextArea.value = templateOutput.textContent.trim(); // Use textContent to get the visible text
+  document.body.appendChild(tempTextArea);
+  tempTextArea.select();
+  document.execCommand('copy');
+  document.body.removeChild(tempTextArea);
+
+  // Change button text to "Copied!"
+  button.textContent = "Copied!";
+
+  // Set a timeout to revert the text back to "Copy"
+  setTimeout(() => {
+    button.textContent = "Copy";
+  }, 1000); // 1000 milliseconds = 1 second delay
 }
 
 
