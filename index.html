@@ -3,91 +3,142 @@
 <head>
   <meta charset="UTF-8">
   <title>Hot Alerts - Beta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" sizes="32x32" href="./images/Hot Alerts Logo.png">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-    /*@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap'); ---old*/ 
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');/* New: Import Montserrat for logo */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+
+    /* CSS Variables for Theming */
+    :root {
+      /* Dark Mode Defaults */
+      --text-color: #e0e0e0;
+      --background-color: #121212;
+      --sidebar-bg: #1c1c1c;
+      --sidebar-border: #2c2c2c;
+      --card-shadow: rgba(0, 0, 0, 0.3);
+      --input-bg: #2a2a2a;
+      --input-border: #3c3c3c;
+      --accent-color: #00B0F0;
+      --accent-hover: #0099D0;
+      --card-bg: #1f1f1f;
+      --warning-bg: #3a1a1a;
+      --warning-text: #ff4f4f;
+      --field-name-color: #ff8f8f;
+      --template-output-bg: #2a2a2a;
+      --template-output-border: #3c3c3c;
+      --copy-btn-text: #000;
+      --search-btn-text: #000;
+      /* Toggle Switch Colors */
+      --toggle-bg-dark: #333;
+      --toggle-bg-light: #f0f0f0;
+      --toggle-handle-dark: #fff;
+      --toggle-handle-light: #333;
+      --toggle-icon-dark: #fff;
+      --toggle-icon-light: #333;
+    }
+
+    body.light-mode {
+      /* Light Mode Overrides */
+      --text-color: #333;
+      --background-color: #f0f2f5;
+      --sidebar-bg: #ffffff;
+      --sidebar-border: #e0e0e0;
+      --card-shadow: rgba(0, 0, 0, 0.1);
+      --input-bg: #ffffff;
+      --input-border: #cccccc;
+      --accent-color: #007bff;
+      --accent-hover: #0056b3;
+      --card-bg: #ffffff;
+      --warning-bg: #ffe0e0;
+      --warning-text: #cc0000;
+      --field-name-color: #aa0000;
+      --template-output-bg: #f9f9f9;
+      --template-output-border: #e0e0e0;
+      --copy-btn-text: #fff;
+      --search-btn-text: #fff;
+      /* Toggle Switch Colors for Light Mode */
+      --toggle-bg-dark: #e0e0e0; /* Changed for light mode */
+      --toggle-bg-light: #007bff; /* Changed for light mode */
+      --toggle-handle-dark: #333; /* Changed for light mode */
+      --toggle-handle-light: #fff; /* Changed for light mode */
+      --toggle-icon-dark: #333; /* Changed for light mode */
+      --toggle-icon-light: #fff; /* Changed for light mode */
+    }
 
     body {
       margin: 0;
-      font-family: 'Roboto', sans-serif; /* Updated to Google Font */
+      font-family: 'Roboto', sans-serif;
       display: flex;
       height: 100vh;
-      background: #0f0f0f;
-      color: #e0e0e0;
+      background: var(--background-color);
+      color: var(--text-color);
+      overflow: hidden; /* Prevent body scroll, main content handles it */
     }
 
     .sidebar {
       width: 280px;
-      /* Fixed width for the sidebar */
       min-width: 280px;
-      /* Ensure it doesn't shrink */
       max-width: 280px;
-      /* Ensure it doesn't expand */
-      background-color: #1c1c1c;
+      background-color: var(--sidebar-bg);
       padding: 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      border-right: 1px solid #2c2c2c;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+      border-right: 1px solid var(--sidebar-border);
+      box-shadow: 2px 0 10px var(--card-shadow);
+      z-index: 20; /* Ensure sidebar is above toggle switch */
     }
-    .montserrat-<uniquifier> {
-        font-family: "Montserrat", sans-serif;
-        font-optical-sizing: auto;
-        font-weight: <weight>;
-        font-style: normal;
-      }
 
     .logo {
       font-size: 30px;
       font-weight: 600;
-      color: #00B0F0; /* Updated: Accent color */
-      margin-bottom: 40px;
+      color: var(--accent-color);
       letter-spacing: 1px;
-      text-align: left; /* Updated: Align to left */
-      font-style: normal;/*Update*/
-      font-display: swap; /*Update*/
-      font-family: "Montserrat", sans-serif;
-      padding-left: 10px; /* Optional: Adjust padding to align with menu if needed */
+      text-align: left;
+      font-style: normal;
+      font-display: swap;
+      font-family: 'Montserrat', sans-serif;
+      padding-left: 10px;
+      margin-bottom: 0;
+      display: flex; /* Use flexbox for icon and text alignment */
+      align-items: center; /* Vertically align items */
+      gap: 8px; /* Space between icon and text */
     }
 
-    .sublogo {
-      font-size: 18px;
-      font-weight: 300;
-      color: #00B0F0; /* Updated: Accent color */
-      margin-bottom: 40px;
-      letter-spacing: 1px;
-      text-align: left; /* Updated: Align to left */
-      font-style: normal;/*Update*/
-      font-display: swap; /*Update*/
-      font-family: "Montserrat", sans-serif;
-      padding-left: 10px; /* Optional: Adjust padding to align with menu if needed */
+    .logo .icon {
+      width: 30px; /* Match font-size of logo text */
+      height: 30px; /* Match font-size of logo text */
+      fill: var(--accent-color); /* Inherit accent color */
+      stroke: var(--accent-color); /* Inherit accent color */
+      flex-shrink: 0; /* Prevent icon from shrinking */
+    }
+
+    /* Remove old theme toggle button styles */
+    #themeToggleButton {
+      display: none; /* Hide the old button */
     }
 
     .menu {
       padding: 0 10px;
     }
 
-    /* Combined style for both input[type="text"] and select elements */
     .menu input[type="text"],
     .menu select {
       width: calc(110% - 22px);
       padding: 10px;
       margin-bottom: 16px;
-      border: 1px solid #3c3c3c;
+      border: 1px solid var(--input-border);
       border-radius: 8px;
-      background: #2a2a2a;
-      color: white;
+      background: var(--input-bg);
+      color: var(--text-color);
       outline: none;
       transition: border 0.3s ease, box-shadow 0.3s ease;
       line-height: normal;
       box-sizing: border-box;
     }
 
-    /* Specific styles for the select (combo box) for custom arrow */
-    .menu select, .card-content select { /* Added .card-content select */
+    .menu select, .card-content select {
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
@@ -100,35 +151,33 @@
 
     .menu input[type="text"]:focus,
     .menu select:focus,
-    .card-content select:focus { /* Added .card-content select */
-      border-color: #00B0F0; /* Updated: Accent color */
-      box-shadow: 0 0 8px rgba(0, 176, 240, 0.4); /* Updated: Accent color */
+    .card-content select:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 8px var(--accent-color);
     }
 
     .menu input[type="text"]::placeholder {
-      color: #aaa;
+      color: var(--text-color);
+      opacity: 0.7;
     }
 
-    /* Styles for missing fields */
     .menu input[type="text"].missing,
     .menu select.missing,
-    .card-content select.missing { /* Added .card-content select */
-      border: 1px solid #ff4f4f;
+    .card-content select.missing {
+      border: 1px solid var(--warning-text);
       animation: shake 0.2s 2;
     }
 
-    /* Styles for filled highlight */
     .menu input[type="text"].filled-highlight,
     .menu select.filled-highlight,
-    .card-content select.filled-highlight { /* Added .card-content select */
+    .card-content select.filled-highlight {
       border: 1px solid #4CAF50;
       box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
     }
 
-    /* NEW: Style for the green flash on clear */
     .menu input[type="text"].cleared-highlight,
     .menu select.cleared-highlight,
-    .card-content select.cleared-highlight { /* Added .card-content select */
+    .card-content select.cleared-highlight {
       border: 1px solid #00ff00 !important;
       box-shadow: 0 0 8px rgba(0, 255, 0, 0.6) !important;
       transition: border 0.1s ease, box-shadow 0.1s ease;
@@ -154,85 +203,81 @@
 
     .bottom-user {
       font-size: 13px;
-      color: #888;
+      color: var(--text-color);
+      opacity: 0.6;
       padding: 20px 10px 0;
-      border-top: 1px solid #2c2c2c;
+      border-top: 1px solid var(--sidebar-border);
       margin-top: 30px;
     }
 
     .main {
       flex-grow: 1;
-      padding: 0 40px 40px 40px; /* Updated: Removed top padding, handled by search-container */
+      padding: 0 40px 40px 40px;
       overflow-y: auto;
-      background-color: #121212;
+      background-color: var(--background-color);
     }
 
-    /* Search Bar Styles */
     .search-container {
       margin-bottom: 24px;
       display: flex;
       gap: 10px;
-      /* New properties for sticky positioning */
-      position: sticky; /* Make the search bar sticky */
-      top: 0; /* Stick to the top of its scrollable container */
-      background-color: #121212; /* Match main background to prevent content showing through */
-      z-index: 10; /* Ensure it stays on top of other elements */
-      
-      /* Adjust margins and padding to visually align and stretch background */
-      margin-left: -40px; /* Pull to the left edge of .main's padding */
-      margin-right: -40px; /* Pull to the right edge of .main's padding */
-      padding: 40px 40px 16px 40px; /* top, right, bottom, left padding for the sticky container */
-      width: calc(100% + 80px); /* Extend width to cover compensated margins */
-      box-sizing: border-box; /* Include padding in the width calculation */
+      position: sticky;
+      top: 0;
+      background-color: var(--background-color);
+      z-index: 10;
+      margin-left: -40px;
+      margin-right: -40px;
+      padding: 40px 40px 16px 40px;
+      width: calc(100% + 80px);
+      box-sizing: border-box;
     }
 
     .search-input {
       flex-grow: 1;
       padding: 10px;
-      height: 50px; /* Set height to 50px */
-      font-size: 15px; /* Set font size to 15px */
-      border: 1px solid #3c3c3c;
+      height: 50px;
+      font-size: 15px;
+      border: 1px solid var(--input-border);
       border-radius: 8px;
-      background: #2a2a2a;
-      color: white;
+      background: var(--input-bg);
+      color: var(--text-color);
       outline: none;
       transition: border 0.3s ease, box-shadow 0.3s ease;
-      box-sizing: border-box; /* Ensures padding is included in the height */
+      box-sizing: border-box;
     }
 
     .search-input:focus {
-      border-color: #00B0F0; /* Updated: Accent color */
-      box-shadow: 0 0 8px rgba(0, 176, 240, 0.4); /* Updated: Accent color */
+      border-color: var(--accent-color);
+      box-shadow: 0 0 8px var(--accent-color);
     }
 
     .search-btn {
       padding: 10px 20px;
-      background: #00B0F0; /* Updated: Accent color */
+      background: var(--accent-color);
       border: none;
       border-radius: 6px;
-      color: #000;
+      color: var(--search-btn-text);
       font-weight: bold;
       cursor: pointer;
       transition: background 0.3s ease;
     }
 
     .search-btn:hover {
-      background: #0099D0; /* Updated: Darker accent color for hover */
+      background: var(--accent-hover);
     }
-    /* End Search Bar Styles */
 
     .card {
-      background-color: #1f1f1f;
+      background-color: var(--card-bg);
       border-radius: 12px;
       padding: 24px;
       margin-bottom: 24px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 15px var(--card-shadow);
       transition: all 0.3s ease;
     }
 
     .card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 6px 20px var(--card-shadow);
     }
 
     .card h3 {
@@ -242,46 +287,36 @@
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      color: #00B0F0; /* Updated: Accent color */
+      color: var(--accent-color);
       padding-bottom: 10px;
-      border-bottom: 1px solid #2a2a2a;
+      border-bottom: 1px solid var(--input-border);
     }
 
     .card-content {
       margin-top: 20px;
-      /* Animation properties */
       max-height: 0;
-      /* collapsed state */
       overflow: hidden;
       transition: max-height 0.5s ease-in-out;
-      /* Smooth transition */
     }
 
     .card-content.expanded {
       max-height: 500px;
-      /* Expanded state - ensure this is large enough to fit all content */
     }
 
     .copy-btn, .clear-btn {
       padding: 12px 25px;
-      background: #00B0F0; /* Updated: Accent color */
+      background: var(--accent-color);
       border: none;
       border-radius: 6px;
-      color: #000;
+      color: var(--copy-btn-text);
       font-weight: bold;
       cursor: pointer;
       transition: background 0.3s ease, transform 0.2s ease;
-      /* Fixed width for the copy button */
       width: 130px;
-      /* Set to 130 pixels */
       box-sizing: border-box;
-      /* Include padding and border in the width */
       overflow: hidden;
-      /* Hide overflow if text is too long */
       text-overflow: ellipsis;
-      /* Add ellipsis if text is too long */
       white-space: nowrap;
-      /* Prevent text wrapping inside the button */
     }
 
     .copy-btn {
@@ -294,55 +329,53 @@
     }
 
     .copy-btn:hover:not(:disabled), .clear-btn:hover:not(.active) {
-      background: #0099D0; /* Updated: Darker accent color for hover */
+      background: var(--accent-hover);
       transform: translateY(-1px);
     }
 
     .copy-btn:disabled {
-      background-color: #555;
-      /* Darker background when disabled */
-      color: #bbb;
-      cursor: not-allowed;
+      background-color: var(--input-border);
+      color: var(--text-color);
       opacity: 0.7;
+      cursor: not-allowed;
     }
 
     .warning {
-      color: #ff4f4f;
+      color: var(--warning-text);
       margin-top: 15px;
       display: none;
       font-weight: bold;
-      background-color: #3a1a1a;
+      background-color: var(--warning-bg);
       padding: 10px;
       border-radius: 6px;
     }
 
     .field-name {
-      color: #ff8f8f;
+      color: var(--field-name-color);
       font-weight: bold;
     }
 
     .template-output {
       font-size: 15px;
       line-height: 1.6;
-      color: #ccc;
+      color: var(--text-color);
       margin-top: 15px;
-      white-space: pre-wrap; /* This ensures text wraps */
+      white-space: pre-wrap;
       word-wrap: break-word;
-      /* Ensures long words break and wrap */
       font-style: italic;
-      background-color: #2a2a2a;
+      background-color: var(--template-output-bg);
       padding: 15px;
       border-radius: 8px;
-      border: 1px solid #3c3c3c;
+      border: 1px solid var(--template-output-border);
     }
 
     .filled {
       font-weight: bold;
-      color: #fff;
+      color: var(--text-color);
     }
 
     .empty {
-      color: #ff4f4f;
+      color: var(--warning-text);
       font-weight: bold;
     }
 
@@ -355,13 +388,98 @@
     .card h3[aria-expanded="true"] .toggle-icon {
       transform: rotate(90deg);
     }
+
+    /* Floating Toggle Switch Styles */
+    .theme-toggle-switch {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px; /* Adjusted width for better appearance */
+      height: 30px; /* Adjusted height */
+      background-color: var(--toggle-bg-dark);
+      border-radius: 15px; /* Half of height for full pill shape */
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 100; /* Ensure it floats above other content */
+    }
+
+    .theme-toggle-switch.light-mode-active {
+      background-color: var(--toggle-bg-light);
+    }
+
+    .theme-toggle-switch .handle {
+      width: 26px; /* Slightly smaller than height to allow padding */
+      height: 26px; /* Slightly smaller than height to allow padding */
+      background-color: var(--toggle-handle-dark);
+      border-radius: 50%;
+      position: absolute;
+      left: 2px; /* Initial position for dark mode */
+      transition: left 0.3s ease, background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle-switch.light-mode-active .handle {
+      left: calc(100% - 28px); /* Move to right for light mode (width - handle width - 2*padding) */
+      background-color: var(--toggle-handle-light);
+    }
+
+    .theme-toggle-switch .icon {
+      position: absolute;
+      width: 18px; /* Icon size */
+      height: 18px; /* Icon size */
+      transition: opacity 0.3s ease, fill 0.3s ease, stroke 0.3s ease;
+    }
+
+    .theme-toggle-switch .icon.sun {
+      left: 6px; /* Position for sun icon */
+      opacity: 0; /* Hidden in dark mode */
+      fill: var(--toggle-icon-light); /* Sun icon color in light mode */
+      stroke: var(--toggle-icon-light);
+    }
+
+    .theme-toggle-switch .icon.moon {
+      right: 6px; /* Position for moon icon */
+      opacity: 1; /* Visible in dark mode */
+      fill: var(--toggle-icon-dark); /* Moon icon color in dark mode */
+      stroke: var(--toggle-icon-dark);
+    }
+
+    .theme-toggle-switch.light-mode-active .icon.sun {
+      opacity: 1; /* Visible in light mode */
+      fill: var(--toggle-icon-light);
+      stroke: var(--toggle-icon-light);
+    }
+
+    .theme-toggle-switch.light-mode-active .icon.moon {
+      opacity: 0; /* Hidden in light mode */
+      fill: var(--toggle-icon-dark);
+      stroke: var(--toggle-icon-dark);
+    }
   </style>
 </head>
 <body>
 
   <div class="sidebar">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 10px 20px;">
+      <div class="logo">
+        <!-- Notepad Icon SVG -->
+        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+          <polyline points="13 2 13 9 20 9"></polyline>
+        </svg>
+        <span>Hot Alerts</span>
+      </div>
+      <!-- Old theme toggle button, now hidden -->
+      <button id="themeToggleButton" style="display: none;">
+        <div id="lottieIconContainer" style="width: 24px; height: 24px;"></div>
+      </button>
+    </div>
     <div>
-      <div class="logo">Hot Alerts</div>
       <div class="menu">
         <select id="customerTitle">
           <option value="">Select Title</option>
@@ -383,7 +501,7 @@
       </div>
     </div>
     <div class="bottom-user">
-      <p><strong>Beta</strong><br>Version 2.0</p>
+      <p><strong>Beta</strong><br>Version 2.1</p>
     </div>
   </div>
 
@@ -415,7 +533,7 @@ Thank you."></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,service,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] is requesting to cancel the DMS appointment for their [[vehicle]] 
+[[customerTitle]] [[customerName]] is requesting to cancel the DMS appointment for their [[vehicle]]
 – [[vin]], scheduled for [[schedule]], for the following service: [[service]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist her at your earliest convenience.
@@ -432,7 +550,7 @@ Thank you!"></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] is looking to 
+[[customerTitle]] [[customerName]] is looking to
 schedule a detail for their [[vehicle]] - [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact the customer at your earliest convenience to set an appointment.
@@ -449,7 +567,7 @@ Thank you."></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] will be towing in their [[vehicle]] – [[vin]] today, as it 
+[[customerTitle]] [[customerName]] will be towing in their [[vehicle]] – [[vin]] today, as it
 is inoperable.
 You may reach the customer at [[phoneNumber]].
 The customer is aware that the vehicle may not be serviced today.
@@ -482,7 +600,7 @@ Thank you."></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] is looking to schedule an appointment for a glass replacement service 
+[[customerTitle]] [[customerName]] is looking to schedule an appointment for a glass replacement service
 ([[accessoryParts]]) for their [[vehicle]] – [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience to set an appointment.
@@ -499,7 +617,7 @@ Thank you."></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] needs to schedule an appointment for their [[vehicle]] – [[vin]] regarding a 
+[[customerTitle]] [[customerName]] needs to schedule an appointment for their [[vehicle]] – [[vin]] regarding a
 replacement key.
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience to set the appointment.
@@ -516,7 +634,7 @@ Thank you."></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] is looking to acquire a loaner vehicle as a replacement for 
+[[customerTitle]] [[customerName]] is looking to acquire a loaner vehicle as a replacement for
 their [[vehicle]] – [[vin]], which is scheduled for service at [[schedule]]
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
@@ -532,9 +650,9 @@ Thank you!"></div>
         <span class="toggle-icon">+</span>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,service,phoneNumber">
-        <div class="template-output preview" data-template="Good 
+        <div class="template-output preview" data-template="Good
 day,
-[[customerTitle]] [[customerName]] needs to 
+[[customerTitle]] [[customerName]] needs to
 schedule an appointment for their [[vehicle]] – [[vin]] for the following service: [[service]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
@@ -551,8 +669,8 @@ Thank you!"></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] is looking to 
-get a pricing quote for a [[accessoryParts]] for 
+[[customerTitle]] [[customerName]] is looking to
+get a pricing quote for a [[accessoryParts]] for
 their [[vehicle]] – [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
@@ -569,8 +687,8 @@ Thank you!"></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,recall,vehicle,vin,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] 
-needs to schedule a recall service ([[recall]]) for 
+[[customerTitle]] [[customerName]]
+needs to schedule a recall service ([[recall]]) for
 their [[vehicle]] – [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact the customer to schedule at your earliest convenience.
@@ -587,7 +705,7 @@ Thank you!"></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,schedule,recall,vehicle,vin,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] has scheduled an appointment at [[schedule]] for the active recall 
+[[customerTitle]] [[customerName]] has scheduled an appointment at [[schedule]] for the active recall
 ([[recall]]) on their [[vehicle]] – [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact the customer if further scheduling or assistance is needed.
@@ -604,7 +722,7 @@ Thank you!"></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] is looking to acquire a rental vehicle as a replacement for 
+[[customerTitle]] [[customerName]] is looking to acquire a rental vehicle as a replacement for
 their [[vehicle]] – [[vin]], which is scheduled for service at [[schedule]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
@@ -621,7 +739,7 @@ Thank you!"></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,service,schedule,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] has scheduled an 
+[[customerTitle]] [[customerName]] has scheduled an
 appointment for their [[vehicle]] – [[vin]] for the following service: [[service]]. The appointment is scheduled at [[schedule]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
@@ -638,8 +756,8 @@ Thank you!"></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,service,vehicle,vin,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] is looking to 
-get a pricing quote for an [[service]] for 
+[[customerTitle]] [[customerName]] is looking to
+get a pricing quote for an [[service]] for
 their [[vehicle]] – [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
@@ -656,7 +774,7 @@ Thank you!"></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] is requesting to be contacted regarding a drop-off using the shuttle 
+[[customerTitle]] [[customerName]] is requesting to be contacted regarding a drop-off using the shuttle
 service.
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
@@ -673,7 +791,7 @@ Thank you!"></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,advisor,vehicle,vin,otherConcern,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] would like to speak with their advisor, [[advisor]], regarding their 
+[[customerTitle]] [[customerName]] would like to speak with their advisor, [[advisor]], regarding their
 [[vehicle]] – [[vin]], about [[otherConcern]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
@@ -690,7 +808,7 @@ Thank you."></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,advisor,vehicle,vin,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] would like to receive an update from their advisor, [[advisor]], regarding 
+[[customerTitle]] [[customerName]] would like to receive an update from their advisor, [[advisor]], regarding
 their [[vehicle]] – [[vin]], which is currently in service.
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
@@ -707,7 +825,7 @@ Thank you!"></div>
       </h3>
       <div class="card-content" data-required="customerTitle,customerName,service,vehicle,vin,schedule,phoneNumber">
         <div class="template-output preview" data-template="Good day,
-[[customerTitle]] [[customerName]] is looking 
+[[customerTitle]] [[customerName]] is looking
 to know the rough time estimate of the service: [[service]], for their [[vehicle]] – [[vin]], which is scheduled for service at [[schedule]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
@@ -730,7 +848,7 @@ You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you!"></div>
         <select id="count" style="width: 180px;
-padding: 10px; border: 1px solid #3c3c3c; border-radius: 8px; background: #2a2a2a; color: white; outline: none; margin-top: 15px;
+padding: 10px; border: 1px solid var(--input-border); border-radius: 8px; background: var(--input-bg); color: var(--text-color); outline: none; margin-top: 15px;
 margin-bottom: 5px;">
           <option value="">Number of tires</option> <option value="one tire">one tire</option>
           <option value="two tires">two tires</option>
@@ -790,6 +908,25 @@ Thank you."></div>
     </div>
   </div>
 
+  <!-- Floating Toggle Switch -->
+  <div id="themeToggleSwitch" class="theme-toggle-switch">
+    <div class="handle"></div>
+    <svg class="icon sun" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <svg class="icon moon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+  </div>
+
   <script>
    const fieldDisplayNames = {
   customerTitle: "Customer Title",
@@ -804,53 +941,75 @@ Thank you."></div>
   service: "Service",
   otherConcern: "Other Concern",
   recall: "RECALL",
-  count: "Count" // Added for the new combo box
+  count: "Count"
 };
 
 let isClearingFields = false;
+
+// Helper function to capitalize the first letter of each word
+function capitalizeWords(str) {
+  if (!str) return '';
+  return str.toLowerCase().split(' ').map(word => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }).join(' ');
+}
+
+// Helper function to convert to All Caps
+function allCaps(str) {
+  return str ? str.toUpperCase() : '';
+}
+
+// Helper function to capitalize the first letter of each noun word
+// This is a simplified approach and might not cover all grammatical nuances
+function capitalizeNouns(str) {
+  if (!str) return '';
+  const commonArticlesPrepositions = new Set(['a', 'an', 'the', 'and', 'but', 'or', 'nor', 'for', 'nor', 'on', 'at', 'to', 'from', 'by', 'with', 'in', 'of', 'off', 'up', 'down', 'for', 'and', 'but', 'or']);
+  return str.toLowerCase().split(' ').map((word, index, array) => {
+    // Capitalize if it's the first word, or not a common article/preposition
+    if (index === 0 || !commonArticlesPrepositions.has(word)) {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+    return word;
+  }).join(' ');
+}
+
 
 function toggleCard(header) {
   const content = header.nextElementSibling;
   const icon = header.querySelector('.toggle-icon');
   const isExpanded = content.classList.contains('expanded');
 
-  // Collapse all other cards and clear their state
   document.querySelectorAll('.card-content').forEach(c => {
-    if (c !== content) { // Don't process the current card yet
+    if (c !== content) {
       c.classList.remove('expanded');
       c.previousElementSibling.querySelector('.toggle-icon').textContent = "+";
       c.previousElementSibling.removeAttribute('aria-expanded');
-      updateCardDisplay(c, false); // Update collapsed cards (no highlights)
+      updateCardDisplay(c, false);
     }
   });
-  removeHighlights(); // This clears all field highlights from the sidebar
+  removeHighlights();
 
-  if (!isExpanded) { // If the card is NOT currently expanded (i.e., it's collapsed)
-    content.classList.add('expanded'); // EXPAND IT
+  if (!isExpanded) {
+    content.classList.add('expanded');
     icon.textContent = "−";
     header.setAttribute('aria-expanded', 'true');
-    updateCardDisplay(content, true); // Update and highlight for the newly expanded card
-  } else { // If the card IS currently expanded -> COLLAPSE IT
+    updateCardDisplay(content, true);
+  } else {
     content.classList.remove('expanded');
     icon.textContent = "+";
     header.removeAttribute('aria-expanded');
-    updateCardDisplay(content, false); // Update the now collapsed card (no highlights)
+    updateCardDisplay(content, false);
   }
 }
 
 function removeHighlights() {
-  // Adjusted to include the new 'count' select element
   document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
     element.classList.remove('missing');
     element.classList.remove('filled-highlight');
     element.classList.remove('cleared-highlight');
   });
-  // REMOVED: document.querySelectorAll('.card-content .warning').forEach(warning => { warning.style.display = "none"; });
-  // The warning's display is now managed by updateCardDisplay and CSS transitions.
 }
 
-// NEW FUNCTION: Updates a single card's display (preview, warning, copy button)
-// and conditionally highlights input fields if isCurrentlyExpanded is true.
 function updateCardDisplay(card, isCurrentlyExpanded) {
   const preview = card.querySelector('.preview');
   const warning = card.querySelector('.warning');
@@ -862,8 +1021,6 @@ function updateCardDisplay(card, isCurrentlyExpanded) {
   let allRequiredFilled = true;
   const missingFields = [];
 
-  // Reset highlights for fields relevant to this card's requirements, but only if
-  // this card is the one being actively expanded/updated OR if we are clearing fields.
   if (isCurrentlyExpanded || isClearingFields) {
     required.forEach(fieldId => {
       const element = document.getElementById(fieldId);
@@ -878,12 +1035,33 @@ function updateCardDisplay(card, isCurrentlyExpanded) {
     const element = document.getElementById(fieldId);
     let value = element ? element.value.trim() : '';
 
-    // Phone number formatting
     if (fieldId === 'phoneNumber' && value) {
       const digitsOnly = value.replace(/\D/g, '');
       if (digitsOnly.length === 10) {
         value = `(${digitsOnly.substring(0, 3)}) ${digitsOnly.substring(3, 6)}-${digitsOnly.substring(6, 10)}`;
       }
+    }
+
+    // Apply formatting based on fieldId
+    switch (fieldId) {
+      case 'customerName':
+      case 'advisor':
+        value = capitalizeWords(value);
+        break;
+      case 'vehicle':
+      case 'vin':
+      case 'schedule':
+      case 'tireBrandSize':
+        value = allCaps(value);
+        break;
+      case 'accessoryParts':
+      case 'service':
+      case 'otherConcern':
+        value = capitalizeNouns(value);
+        break;
+      default:
+        // No specific formatting for other fields
+        break;
     }
 
     if (required.includes(fieldId)) {
@@ -893,17 +1071,15 @@ function updateCardDisplay(card, isCurrentlyExpanded) {
       if (!value || isCustomerTitleMissing || isCountMissing) {
         allRequiredFilled = false;
         missingFields.push(fieldId);
-        if (element && isCurrentlyExpanded && !isClearingFields) { // ONLY highlight if expanded and not clearing
+        if (element && isCurrentlyExpanded && !isClearingFields) {
           element.classList.add('missing');
         }
       } else {
-        if (element && isCurrentlyExpanded && !isClearingFields) { // ONLY highlight if expanded and not clearing
+        if (element && isCurrentlyExpanded && !isClearingFields) {
           element.classList.add('filled-highlight');
         }
       }
     }
-    // Fields not 'required' by this card will not have 'missing' or 'filled-highlight' applied by this function.
-    // Global `removeHighlights()` on toggle/clear ensures general cleanup.
 
     if (!value || (fieldId === 'customerTitle' && value === '') || (fieldId === 'count' && (value === '' || value === 'Number of tires'))) {
       return `<span class="empty">[EMPTY]</span>`;
@@ -916,22 +1092,19 @@ function updateCardDisplay(card, isCurrentlyExpanded) {
   if (!allRequiredFilled) {
     const fieldNames = missingFields.map(f => `<span class="field-name">${fieldDisplayNames[f] || f}</span>`).join(', ');
     warning.innerHTML = `⚠️ Please fill in all required fields: ${fieldNames}`;
-    if (isCurrentlyExpanded && !isClearingFields) { // Show warning only if expanded and not clearing
+    if (isCurrentlyExpanded && !isClearingFields) {
       warning.style.display = "block";
     }
-    // No 'else' here to set display: none, allowing CSS transition to hide it on collapse
     if (copyBtn) copyBtn.disabled = true;
   } else {
-    warning.style.display = "none"; // This remains, as it correctly hides the warning when fields ARE filled.
+    warning.style.display = "none";
     if (copyBtn) copyBtn.disabled = false;
   }
 }
 
-// NEW FUNCTION: Updates all card previews and copy button states without highlighting fields red.
-// Used on initial load and after clearing fields.
 function updateAllCardPreviewsAndButtons() {
   document.querySelectorAll('.card-content').forEach(card => {
-    updateCardDisplay(card, false); // Call with isCurrentlyExpanded = false (no red highlights)
+    updateCardDisplay(card, false);
   });
 }
 
@@ -940,7 +1113,6 @@ function clearTextFields() {
   const clearButton = document.getElementById('clearAllBtn');
   const originalButtonText = clearButton.textContent;
 
-  // Change button text to "Cleared!"
   clearButton.textContent = "Cleared!";
 
   document.getElementById('customerTitle').value = "";
@@ -970,45 +1142,39 @@ function clearTextFields() {
     }, 1000);
   });
 
-  removeHighlights(); // Ensure all highlights are removed from sidebar inputs
-  updateAllCardPreviewsAndButtons(); // Update all cards' previews and buttons without highlighting fields red
+  removeHighlights();
+  updateAllCardPreviewsAndButtons();
 
   setTimeout(() => {
-    clearButton.textContent = originalButtonText; // Revert button text after 1 second
+    clearButton.textContent = originalButtonText;
   }, 1000);
 
   isClearingFields = false;
 }
 
-// Function to copy template content
 function copyTemplate(button) {
-  // Only proceed if the button is not disabled
   if (button.disabled) {
     return;
   }
 
   const cardContent = button.closest('.card-content');
-  const templateOutput = cardContent.querySelector('.template-output');
+  const templateOutput = cardContent.querySelector('.template-output.preview');
   
-  // Create a temporary textarea to hold the text to be copied
   const tempTextArea = document.createElement('textarea');
-  tempTextArea.value = templateOutput.textContent.trim(); // Use textContent to get the visible text
+  tempTextArea.value = templateOutput.textContent.trim();
   document.body.appendChild(tempTextArea);
   tempTextArea.select();
   document.execCommand('copy');
   document.body.removeChild(tempTextArea);
 
-  // Change button text to "Copied!"
   button.textContent = "Copied!";
 
-  // Set a timeout to revert the text back to "Copy"
   setTimeout(() => {
     button.textContent = "Copy";
-  }, 1000); // 1000 milliseconds = 1 second delay
+  }, 1000);
 }
 
 
-// Search functionality
 const searchTags = [
   "accessory", "appointment", "advisor", "cancel", "car", "check", "detailing", "dms", "emergency", "glass", "general", "inquiry", "install", "keys", "loaner", "need", "parts", "pricing", "recall", "rental", "request", "scheduled", "service", "shuttle", "status", "timeframe", "tire", "tow", "update", "valet", "vehicle", "walk"
 ];
@@ -1027,14 +1193,11 @@ function filterCards() {
     let isMatch = false;
 
     if (searchTerm === "") {
-      isMatch = true; // Show all cards if search term is empty
+      isMatch = true;
     } else {
-      // Check if the normalized card title contains the search term directly
       if (normalizedCardTitle.includes(searchTerm)) {
         isMatch = true;
       } else {
-        // Check if any of the predefined search tags are present in the card title
-        // AND the search term is a substring of that tag or vice-versa.
         isMatch = searchTags.some(tag => {
           return normalizedCardTitle.includes(tag) && (tag.includes(searchTerm) || searchTerm.includes(tag));
         });
@@ -1042,20 +1205,50 @@ function filterCards() {
     }
 
     if (isMatch) {
-      card.style.display = 'block'; // Show the card
+      card.style.display = 'block';
     } else {
-      card.style.display = 'none'; // Hide the card
+      card.style.display = 'none';
     }
   });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Existing event listener for phone number input (remains largely the same)
+  // Theme Toggle Logic
+  const themeToggleSwitch = document.getElementById('themeToggleSwitch');
+  const body = document.body;
+
+  function applyTheme(theme) {
+    if (theme === 'light-mode') {
+      body.classList.add('light-mode');
+      themeToggleSwitch.classList.add('light-mode-active');
+    } else {
+      body.classList.remove('light-mode');
+      themeToggleSwitch.classList.remove('light-mode-active');
+    }
+    localStorage.setItem('theme', theme);
+  }
+
+  // Set initial theme based on localStorage or default to dark
+  const currentTheme = localStorage.getItem('theme');
+  if (currentTheme) {
+    applyTheme(currentTheme);
+  } else {
+    applyTheme('dark-mode'); // Default theme
+  }
+
+  themeToggleSwitch.addEventListener('click', function() {
+    if (body.classList.contains('light-mode')) {
+      applyTheme('dark-mode');
+    } else {
+      applyTheme('light-mode');
+    }
+  });
+
   const phoneNumberInput = document.getElementById('phoneNumber');
   if (phoneNumberInput) {
     phoneNumberInput.addEventListener('input', function(e) {
       const input = e.target;
-      let value = input.value.replace(/\D/g, ''); // Remove non-digits
+      let value = input.value.replace(/\D/g, '');
       if (value.length > 10) {
         value = value.substring(0, 10);
       }
@@ -1071,47 +1264,43 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       input.value = formattedValue;
 
-      // Update active card's display or all previews if no card is open
       if (!isClearingFields) {
         const openCard = document.querySelector('.card-content.expanded');
         if (openCard) {
-          updateCardDisplay(openCard, true); // Update and highlight the active card
+          updateCardDisplay(openCard, true);
         } else {
-          updateAllCardPreviewsAndButtons(); // Update all previews and buttons if no card is open
+          updateAllCardPreviewsAndButtons();
         }
       }
     });
   }
 
-  // Event listeners for all other input and select elements in the .menu and .card-content select#count
   document.querySelectorAll('.menu input[type="text"], .menu select, select#count').forEach(element => {
     element.addEventListener('input', function() {
       const openCard = document.querySelector('.card-content.expanded');
       if (openCard) {
-        updateCardDisplay(openCard, true); // Update and highlight the active card
+        updateCardDisplay(openCard, true);
       } else {
-        updateAllCardPreviewsAndButtons(); // Update all previews and buttons if no card is open
+        updateAllCardPreviewsAndButtons();
       }
     });
-    element.addEventListener('change', function() { // Added for select elements
+    element.addEventListener('change', function() {
       const openCard = document.querySelector('.card-content.expanded');
       if (openCard) {
-        updateCardDisplay(openCard, true); // Update and highlight the active card
+        updateCardDisplay(openCard, true);
       } else {
-        updateAllCardPreviewsAndButtons(); // Update all previews and buttons if no card is open
+        updateAllCardPreviewsAndButtons();
       }
     });
   });
 
-  // IMPORTANT INITIALIZATION ON LOAD:
-  removeHighlights(); // Ensures no red/green highlights are present initially
-  updateAllCardPreviewsAndButtons(); // Updates all card previews and disables copy buttons if fields are empty, without applying red highlights to fields.
+  removeHighlights();
+  updateAllCardPreviewsAndButtons();
 
-  // Search bar event listeners
   const cardSearchInput = document.getElementById('cardSearchInput');
   if (cardSearchInput) {
     cardSearchInput.addEventListener('keyup', filterCards);
-    filterCards(); // Initial filter to show all cards
+    filterCards();
   }
 });
   </script>
