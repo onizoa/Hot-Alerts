@@ -74,6 +74,7 @@
       background: var(--background-color);
       color: var(--text-color);
       overflow: hidden; /* Prevent body scroll, main content handles it */
+      filter: none !important; /* Added: Prevents dark mode extensions from altering overall page colors */
     }
 
     .sidebar {
@@ -111,6 +112,7 @@
       height: 30px; /* Match font-size of logo text */
       /* Removed fill and stroke to allow inline SVG styles to take precedence */
       flex-shrink: 0; /* Prevent icon from shrinking */
+      filter: none !important; /* Added to prevent dark mode extensions from altering colors */
     }
 
     /* Remove old theme toggle button styles */
