@@ -488,8 +488,8 @@
       <div class="menu">
         <select id="customerTitle">
           <option value="">Select Title</option>
-          <option value="Mr.">Mr.</option>
-          <option value="Mrs/Ms.">Mrs/Ms.</option>
+          <option value="Mr.">Mr</option>
+          <option value="Mrs/Ms.">Mrs/Ms</option>
         </select>
         <input type="text" id="phoneNumber" placeholder="Phone Number">
         <input type="text" id="customerName" placeholder="Customer Name">
@@ -541,7 +541,7 @@
         </h3>
         <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
           <div class="template-output preview" data-template="Good day,
-[[customerTitle]]. [[customerName]] is looking to schedule an appointment regarding an [[accessoryParts]] for their [[vehicle]] - [[vin]].
+[[customerTitle]] [[customerName]] is looking to schedule an appointment regarding an [[accessoryParts]] for their [[vehicle]] - [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact your earliest convenience to set an appointment.
 Thank you."></div>
@@ -1066,7 +1066,7 @@ function updateCardDisplay(card, isCurrentlyExpanded) {
         break;
       case 'accessoryParts':
       case 'service':
-      case 'otherConcern':
+      /*case 'otherConcern': -- remove for testing */ 
         value = capitalizeNouns(value);
         break;
       default:
