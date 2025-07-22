@@ -36,6 +36,10 @@
       --toggle-handle-light: #333;
       --toggle-icon-dark: #fff;
       --toggle-icon-light: #333;
+
+      /* New Top Bar Colors */
+      --topbar-bg: #1c1c1c;
+      --topbar-shadow: rgba(0, 0, 0, 0.2);
     }
 
     body.light-mode {
@@ -64,6 +68,10 @@
       --toggle-handle-light: #fff; /* Changed for light mode */
       --toggle-icon-dark: #333; /* Changed for light mode */
       --toggle-icon-light: #fff; /* Changed for light mode */
+
+      /* New Top Bar Colors for Light Mode */
+      --topbar-bg: #ffffff;
+      --topbar-shadow: rgba(0, 0, 0, 0.1);
     }
 
     body {
@@ -74,7 +82,7 @@
       background: var(--background-color);
       color: var(--text-color);
       overflow: hidden; /* Prevent body scroll, main content handles it */
-      filter: none !important; /* Added: Prevents dark mode extensions from altering overall page colors */
+      filter: none !important; /* Prevents dark mode extensions from altering overall page colors */
     }
 
     .sidebar {
@@ -110,9 +118,8 @@
     .logo .icon {
       width: 30px; /* Match font-size of logo text */
       height: 30px; /* Match font-size of logo text */
-      /* Removed fill and stroke to allow inline SVG styles to take precedence */
       flex-shrink: 0; /* Prevent icon from shrinking */
-      filter: none !important; /* Added to prevent dark mode extensions from altering colors */
+      filter: none !important; /* Prevents dark mode extensions from altering colors */
     }
 
     /* Remove old theme toggle button styles */
@@ -213,59 +220,91 @@
 
     .main {
       flex-grow: 1;
-      padding: 0 40px 40px 40px;
-      overflow-y: auto;
+      display: flex; /* Changed to flex to stack top-header and cards */
+      flex-direction: column; /* Stack children vertically */
+      overflow-y: auto; /* Allow scrolling for main content */
       background-color: var(--background-color);
-      scroll-behavior: smooth; /* UPDATED: Added smooth scrolling */
+      scroll-behavior: smooth;
     }
 
-    .search-container {
-      margin-bottom: 24px;
+    /* New Top Header Styles */
+    .top-header {
       display: flex;
-      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px; /* Adjusted padding */
+      background-color: var(--topbar-bg);
+      box-shadow: 0 2px 10px var(--topbar-shadow);
       position: sticky;
       top: 0;
-      background-color: var(--background-color);
       z-index: 10;
-      margin-left: -40px;
-      margin-right: -40px;
-      padding: 40px 40px 16px 40px;
-      width: calc(100% + 80px);
-      box-sizing: border-box;
+      flex-shrink: 0; /* Prevent it from shrinking */
     }
 
-    .search-input {
+    /* Search Bar Wrapper */
+    .search-wrapper {
+      display: flex;
+      align-items: center;
       flex-grow: 1;
-      padding: 10px;
-      height: 50px;
-      font-size: 15px;
+      max-width: 600px; /* Limit max width of search bar */
+      background-color: var(--input-bg);
       border: 1px solid var(--input-border);
-      border-radius: 8px;
-      background: var(--input-bg);
-      color: var(--text-color);
-      outline: none;
+      border-radius: 50px; /* Pill shape */
+      padding: 3px 15px; /* Internal padding */
       transition: border 0.3s ease, box-shadow 0.3s ease;
-      box-sizing: border-box;
     }
 
-    .search-input:focus {
+    .search-wrapper:focus-within {
       border-color: var(--accent-color);
       box-shadow: 0 0 8px var(--accent-color);
     }
 
+    .search-input {
+      flex-grow: 1;
+      padding: 0; /* Reset padding as it's handled by wrapper */
+      height: 33px; /* Adjusted height for circular look */
+      font-size: 15px;
+      border: none; /* Remove individual border */
+      background: transparent; /* Transparent background */
+      color: var(--text-color);
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-color);
+      opacity: 0.7;
+    }
+
     .search-btn {
-      padding: 10px 20px;
       background: var(--accent-color);
       border: none;
-      border-radius: 6px;
-      color: var(--search-btn-text);
-      font-weight: bold;
+      border-radius: 50%; /* Circular button */
+      width: 38px; /* Size for circular button */
+      height: 38px; /* Size for circular button */
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       transition: background 0.3s ease;
+      flex-shrink: 0; /* Prevent shrinking */
+      margin-left: 10px; /* Space between input and button */
     }
 
     .search-btn:hover {
       background: var(--accent-hover);
+    }
+
+    .search-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--search-btn-text);
+    }
+
+    .card-list-container {
+      padding: 20px 40px 40px 40px; /* Padding for the card content below the top bar */
+      flex-grow: 1;
+      overflow-y: auto; /* Allow scrolling for cards */
     }
 
     .card {
@@ -391,61 +430,47 @@
       transform: rotate(90deg);
     }
 
-    /* Floating Toggle Switch Styles */
+    /* Theme Toggle Switch Styles (Adjusted for top bar) */
     .theme-toggle-switch {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px; /* Adjusted width for better appearance */
-      height: 30px; /* Adjusted height */
-      background-color: var(--toggle-bg-dark);
-      border-radius: 15px; /* Half of height for full pill shape */
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      z-index: 100; /* Ensure it floats above other content */
-    }
-
-    .theme-toggle-switch.light-mode-active {
-      background-color: var(--toggle-bg-light);
-    }
-
-    .theme-toggle-switch .handle {
-      width: 26px; /* Slightly smaller than height to allow padding */
-      height: 26px; /* Slightly smaller than height to allow padding */
-      background-color: var(--toggle-handle-dark);
-      border-radius: 50%;
-      position: absolute;
-      left: 2px; /* Initial position for dark mode */
-      transition: left 0.3s ease, background-color 0.3s ease;
+      width: 40px; /* Circular button size */
+      height: 40px; /* Circular button size */
+      background-color: var(--input-bg); /* Use input background for consistency */
+      border: 1px solid var(--input-border); /* Use input border for consistency */
+      border-radius: 50%; /* Circular shape */
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      margin-left: 20px; /* Space from search bar */
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
-    .theme-toggle-switch.light-mode-active .handle {
-      left: calc(100% - 28px); /* Move to right for light mode (width - handle width - 2*padding) */
-      background-color: var(--toggle-handle-light);
+    .theme-toggle-switch:hover {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 8px var(--accent-color);
+    }
+
+    .theme-toggle-switch.light-mode-active {
+      background-color: var(--toggle-bg-light); /* Use accent color for light mode active state */
+      border-color: var(--toggle-bg-light);
     }
 
     .theme-toggle-switch .icon {
-      position: absolute;
-      width: 18px; /* Icon size */
-      height: 18px; /* Icon size */
+      position: absolute; /* Position icons within the circular button */
+      width: 24px; /* Icon size */
+      height: 24px; /* Icon size */
       transition: opacity 0.3s ease, fill 0.3s ease, stroke 0.3s ease;
     }
 
     .theme-toggle-switch .icon.sun {
-      left: 6px; /* Position for sun icon */
       opacity: 0; /* Hidden in dark mode */
       fill: var(--toggle-icon-light); /* Sun icon color in light mode */
       stroke: var(--toggle-icon-light);
     }
 
     .theme-toggle-switch .icon.moon {
-      right: 6px; /* Position for moon icon */
       opacity: 1; /* Visible in dark mode */
       fill: var(--toggle-icon-dark); /* Moon icon color in dark mode */
       stroke: var(--toggle-icon-dark);
@@ -469,9 +494,20 @@
   <div class="sidebar">
     <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 10px 20px;">
       <div class="logo">
-        <svg class="icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" fill="#E0E0E0"></path>
-          <polyline points="13 2 13 9 20 9" stroke="#4A90E2" fill="none"></polyline>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="Spiral-Notepad--Streamline-Twemoji" class="icon">
+            <desc>Spiral Notepad Streamline Emoji: https://streamlinehq.com</desc>
+            <path fill="#66757f" d="M24.724444444444444 3.5555555555555554h1.7742222222222221v2.1253333333333333h-1.7742222222222221z" stroke-width="0.8889"></path>
+            <path fill="#55acee" d="M25.777777777777775 3.5555555555555554H8C6.036444444444444 3.5555555555555554 4.444444444444445 5.147555555555556 4.444444444444445 7.111111111111111v21.333333333333332c0 1.9635555555555555 1.5919999999999999 3.5555555555555554 3.5555555555555554 3.5555555555555554h17.77777777777778c1.9635555555555555 0 3.5555555555555554 -1.5919999999999999 3.5555555555555554 -3.5555555555555554V7.111111111111111c0 -1.9635555555555555 -1.5919999999999999 -3.5555555555555554 -3.5555555555555554 -3.5555555555555554z" stroke-width="0.8889"></path>
+            <path fill="#ccd6dd" d="M24 3.5555555555555554H6.222222222222221C4.258666666666667 3.5555555555555554 2.6666666666666665 5.147555555555556 2.6666666666666665 7.111111111111111v21.333333333333332c0 1.9635555555555555 1.5919999999999999 3.5555555555555554 3.5555555555555554 3.5555555555555554h17.77777777777778c1.9635555555555555 0 3.5555555555555554 -1.5919999999999999 3.5555555555555554 -3.5555555555555554V7.111111111111111c0 -1.9635555555555555 -1.5919999999999999 -3.5555555555555554 -3.5555555555555554 -3.5555555555555554z" stroke-width="0.8889"></path>
+            <path fill="#99aab5" d="M24.888888888888886 13.333333333333332c0 0.4915555555555556 -0.3973333333333333 0.8888888888888888 -0.8888888888888888 0.8888888888888888H6.222222222222221c-0.4906666666666667 0 -0.8888888888888888 -0.3973333333333333 -0.8888888888888888 -0.8888888888888888 0 -0.4906666666666667 0.3982222222222222 -0.8888888888888888 0.8888888888888888 -0.8888888888888888h17.77777777777778c0.4915555555555556 0 0.8888888888888888 0.3982222222222222 0.8888888888888888 0.8888888888888888zm0 4.444444444444445c0 0.4915555555555556 -0.3973333333333333 0.8888888888888888 -0.8888888888888888 0.8888888888888888H6.222222222222221c-0.4906666666666667 0 -0.8888888888888888 -0.3973333333333333 -0.8888888888888888 -0.8888888888888888 0 -0.4915555555555556 0.3982222222222222 -0.8888888888888888 0.8888888888888888 -0.8888888888888888h17.77777777777778c0.4915555555555556 0 0.8888888888888888 0.3973333333333333 0.8888888888888888 0.8888888888888888zm0 4.444444444444445c0 0.4915555555555556 -0.3973333333333333 0.8888888888888888 -0.8888888888888888 0.8888888888888888H6.222222222222221c-0.4906666666666667 0 -0.8888888888888888 -0.3973333333333333 -0.8888888888888888 -0.8888888888888888 0 -0.4915555555555556 0.3982222222222222 -0.8888888888888888 0.8888888888888888 -0.8888888888888888h17.77777777777778c0.4915555555555556 0 0.8888888888888888 0.3973333333333333 0.8888888888888888 0.8888888888888888zm-7.111111111111111 4.444444444444445c0 0.4915555555555556 -0.3973333333333333 0.8888888888888888 -0.8888888888888888 0.8888888888888888H6.222222222222221c-0.4906666666666667 0 -0.8888888888888888 -0.3973333333333333 -0.8888888888888888 -0.8888888888888888 0 -0.4915555555555556 0.3982222222222222 -0.8888888888888888 0.8888888888888888 -0.8888888888888888h10.666666666666666c0.4915555555555556 0 0.8888888888888888 0.3973333333333333 0.8888888888888888 0.8888888888888888z" stroke-width="0.8889"></path>
+            <path fill="#292f33" d="M6.965333333333334 7.760888888888888c-0.6239999999999999 0 -1.1297777777777775 -0.592 -1.1297777777777775 -1.3235555555555556 0 -0.7306666666666666 0.5057777777777777 -1.3235555555555556 1.1297777777777775 -1.3235555555555556 0.6231111111111111 0 1.1288888888888888 0.5928888888888889 1.1288888888888888 1.3235555555555556 0 0.7306666666666666 -0.5057777777777777 1.3235555555555556 -1.1288888888888888 1.3235555555555556z" stroke-width="0.8889"></path>
+            <path fill="#66757f" d="M7.593777777777777 6.295999999999999c-0.048888888888888885 -0.42666666666666664 -0.33244444444444443 -0.704 -0.6479999999999999 -0.9039999999999999 -0.43111111111111106 -0.27288888888888885 -0.8888888888888888 -0.8959999999999999 -0.8888888888888888 -1.6684444444444444 0 -0.9813333333333334 0.5964444444444444 -1.8622222222222222 1.3333333333333333 -1.8622222222222222s1.3333333333333333 0.8044444444444444 1.3333333333333333 1.6933333333333334h1.7742222222222221c-0.018666666666666668 -1.7777777777777777 -1.4 -3.3964444444444446 -3.1075555555555554 -3.3964444444444446 -1.719111111111111 0 -3.1111111111111107 1.6168888888888888 -3.1111111111111107 3.5599999999999996 0 1.647111111111111 0.9288888888888888 2.9964444444444442 2.2835555555555556 3.489777777777778 0.6755555555555556 0.24533333333333335 1.0879999999999999 -0.3973333333333333 1.031111111111111 -0.9119999999999999z" stroke-width="0.8889"></path>
+            <path fill="#292f33" d="M12.298666666666666 7.760888888888888c-0.6239999999999999 0 -1.1297777777777775 -0.592 -1.1297777777777775 -1.3235555555555556 0 -0.7306666666666666 0.5057777777777777 -1.3235555555555556 1.1297777777777775 -1.3235555555555556 0.6231111111111111 0 1.1288888888888888 0.5928888888888889 1.1288888888888888 1.3235555555555556 0 0.7306666666666666 -0.5057777777777777 1.3235555555555556 -1.1288888888888888 1.3235555555555556z" stroke-width="0.8889"></path>
+            <path fill="#66757f" d="M12.92711111111111 6.295999999999999c-0.048888888888888885 -0.42666666666666664 -0.33244444444444443 -0.704 -0.6479999999999999 -0.9039999999999999 -0.43111111111111106 -0.27288888888888885 -0.8888888888888888 -0.8959999999999999 -0.8888888888888888 -1.6684444444444444 0 -0.9813333333333334 0.5964444444444444 -1.8622222222222222 1.3333333333333333 -1.8622222222222222s1.3333333333333333 0.8044444444444444 1.3333333333333333 1.6933333333333334h1.7742222222222221c-0.017777777777777778 -1.7777777777777777 -1.4 -3.3964444444444446 -3.1075555555555554 -3.3964444444444446 -1.719111111111111 0 -3.1111111111111107 1.6168888888888888 -3.1111111111111107 3.5599999999999996 0 1.647111111111111 0.9288888888888888 2.9964444444444442 2.2835555555555556 3.489777777777778 0.6755555555555556 0.24533333333333335 1.0879999999999999 -0.3973333333333333 1.031111111111111 -0.9119999999999999z" stroke-width="0.8889"></path>
+            <path fill="#292f33" d="M17.631999999999998 7.760888888888888c-0.6239999999999999 0 -1.1297777777777775 -0.592 -1.1297777777777775 -1.3235555555555556 0 -0.7306666666666666 0.5057777777777777 -1.3235555555555556 1.1297777777777775 -1.3235555555555556 0.6231111111111111 0 1.1297777777777775 0.5928888888888889 1.1297777777777775 1.3235555555555556 -0.0008888888888888888 0.7306666666666666 -0.5066666666666666 1.3235555555555556 -1.1297777777777775 1.3235555555555556z" stroke-width="0.8889"></path>
+            <path fill="#66757f" d="M18.260444444444442 6.295999999999999c-0.048888888888888885 -0.42666666666666664 -0.33244444444444443 -0.704 -0.6471111111111111 -0.9039999999999999 -0.43111111111111106 -0.27288888888888885 -0.8888888888888888 -0.8959999999999999 -0.8888888888888888 -1.6684444444444444 0 -0.9813333333333334 0.5964444444444444 -1.8622222222222222 1.3333333333333333 -1.8622222222222222s1.3333333333333333 0.8044444444444444 1.3333333333333333 1.6933333333333334h1.7742222222222221c-0.017777777777777778 -1.7777777777777777 -1.4 -3.3964444444444446 -3.1075555555555554 -3.3964444444444446 -1.719111111111111 0 -3.1111111111111107 1.6168888888888888 -3.1111111111111107 3.5599999999999996 0 1.647111111111111 0.9288888888888888 2.9964444444444442 2.2835555555555556 3.489777777777778 0.6746666666666666 0.24533333333333335 1.0871111111111111 -0.3973333333333333 1.0302222222222222 -0.9119999999999999z" stroke-width="0.8889"></path>
+            <path fill="#292f33" d="M22.96533333333333 7.760888888888888c-0.6239999999999999 0 -1.1297777777777775 -0.592 -1.1297777777777775 -1.3235555555555556 0 -0.7306666666666666 0.5057777777777777 -1.3235555555555556 1.1297777777777775 -1.3235555555555556 0.6231111111111111 0 1.1297777777777775 0.5928888888888889 1.1297777777777775 1.3235555555555556 -0.0008888888888888888 0.7306666666666666 -0.5066666666666666 1.3235555555555556 -1.1297777777777775 1.3235555555555556z" stroke-width="0.8889"></path>
+            <path fill="#66757f" d="M23.593777777777778 6.295999999999999c-0.048888888888888885 -0.42666666666666664 -0.33244444444444443 -0.704 -0.6471111111111111 -0.9039999999999999 -0.43111111111111106 -0.27288888888888885 -0.8888888888888888 -0.8959999999999999 -0.8888888888888888 -1.6684444444444444 0 -0.9813333333333334 0.5964444444444444 -1.8622222222222222 1.3333333333333333 -1.8622222222222222s1.3333333333333333 0.8044444444444444 1.3333333333333333 1.6933333333333334h1.7742222222222221c-0.017777777777777778 -1.7777777777777777 -1.4 -3.3964444444444446 -3.1075555555555554 -3.3964444444444446 -1.719111111111111 0 -3.1111111111111107 1.6168888888888888 -3.1111111111111107 3.5599999999999996 0 1.647111111111111 0.9288888888888888 2.9964444444444442 2.2835555555555556 3.489777777777778 0.6746666666666666 0.24533333333333335 1.0871111111111111 -0.3973333333333333 1.0302222222222222 -0.9119999999999999z" stroke-width="0.8889"></path>
         </svg>
         <span>Hot Alerts</span>
       </div>
@@ -506,424 +542,426 @@
   </div>
 
   <div class="main">
-    <div class="search-container">
-      <input type="text" id="cardSearchInput" placeholder="Search for templates." class="search-input">
+    <div class="top-header">
+      <div class="search-wrapper">
+        <input type="text" id="cardSearchInput" placeholder="Search for templates..." class="search-input">
       </div>
+      <div id="themeToggleSwitch" class="theme-toggle-switch">
+        <svg class="icon sun" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="icon moon" viewBox="0 0 24 24">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </div>
+    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Accessory/Parts Install Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+    <div class="card-list-container">
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Accessory/Parts Install Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]]. [[customerName]] is looking to schedule an appointment regarding an [[accessoryParts]] for their [[vehicle]] - [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact your earliest convenience to set an appointment.
 Thank you."></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Cancel DMS Appointment Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,service,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Cancel DMS Appointment Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,service,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] is requesting to cancel the DMS appointment for their [[vehicle]]
 – [[vin]], scheduled for [[schedule]], for the following service: [[service]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist her at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Detailing Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Detailing Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] is looking to
 schedule a detail for their [[vehicle]] - [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact the customer at your earliest convenience to set an appointment.
 Thank you."></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Emergency Walk-ins Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Emergency Walk-ins Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] will be towing in their [[vehicle]] – [[vin]] today, as it
 is inoperable.
 You may reach the customer at [[phoneNumber]].
 The customer is aware that the vehicle may not be serviced today.
 Thank you"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        General Inquiry Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,otherConcern,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          General Inquiry Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,otherConcern,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] would like to inquire about [[otherConcern]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you."></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Glass Services Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Glass Services Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] is looking to schedule an appointment for a glass replacement service
 ([[accessoryParts]]) for their [[vehicle]] – [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience to set an appointment.
 Thank you."></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Keys Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Keys Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] needs to schedule an appointment for their [[vehicle]] – [[vin]] regarding a
 replacement key.
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience to set the appointment.
 Thank you."></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Loaner Car Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Loaner Car Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] is looking to acquire a loaner vehicle as a replacement for
 their [[vehicle]] – [[vin]], which is scheduled for service at [[schedule]]
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
-    
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Need Appointment Scheduled Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,service,phoneNumber">
-        <div class="template-output preview" data-template="Good
+      
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Need Appointment Scheduled Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,service,phoneNumber">
+          <div class="template-output preview" data-template="Good
 day,
 [[customerTitle]] [[customerName]] needs to
 schedule an appointment for their [[vehicle]] – [[vin]] for the following service: [[service]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Parts Pricing Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Parts Pricing Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,accessoryParts,vehicle,vin,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] is looking to
 get a pricing quote for a [[accessoryParts]] for
 their [[vehicle]] – [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        RECALL - Needs to Scheduled Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,recall,vehicle,vin,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          RECALL - Needs to Scheduled Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,recall,vehicle,vin,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]]
 needs to schedule a recall service ([[recall]]) for
 their [[vehicle]] – [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact the customer to schedule at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        RECALL - Scheduled Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,schedule,recall,vehicle,vin,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          RECALL - Scheduled Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,schedule,recall,vehicle,vin,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] has scheduled an appointment at [[schedule]] for the active recall
 ([[recall]]) on their [[vehicle]] – [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact the customer if further scheduling or assistance is needed.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Rental Car Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Rental Car Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] is looking to acquire a rental vehicle as a replacement for
 their [[vehicle]] – [[vin]], which is scheduled for service at [[schedule]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Scheduled Appointment Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,service,schedule,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Scheduled Appointment Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,service,schedule,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] has scheduled an
 appointment for their [[vehicle]] – [[vin]] for the following service: [[service]]. The appointment is scheduled at [[schedule]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Service Pricing Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,service,vehicle,vin,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Service Pricing Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,service,vehicle,vin,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] is looking to
 get a pricing quote for an [[service]] for
 their [[vehicle]] – [[vin]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Shuttle Service Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Shuttle Service Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] is requesting to be contacted regarding a drop-off using the shuttle
 service.
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Speak with Advisor Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,advisor,vehicle,vin,otherConcern,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Speak with Advisor Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,advisor,vehicle,vin,otherConcern,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] would like to speak with their advisor, [[advisor]], regarding their
 [[vehicle]] – [[vin]], about [[otherConcern]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you."></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Status Check Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,advisor,vehicle,vin,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Status Check Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,advisor,vehicle,vin,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] would like to receive an update from their advisor, [[advisor]], regarding
 their [[vehicle]] – [[vin]], which is currently in service.
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Timeframe for Service Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,service,vehicle,vin,schedule,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Timeframe for Service Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,service,vehicle,vin,schedule,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] is looking
 to know the rough time estimate of the service: [[service]], for their [[vehicle]] – [[vin]], which is scheduled for service at [[schedule]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Tire Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,tireBrandSize,count,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Tire Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,tireBrandSize,count,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] needs to order a tire for their [[vehicle]] – [[vin]].
 The customer has specified a [[tireBrandSize]] and requires [[count]].
 You may reach the customer at [[phoneNumber]].
 Please contact and assist at your earliest convenience.
 Thank you!"></div>
-        <select id="count" style="width: 180px;
+          <select id="count" style="width: 180px;
 padding: 10px; border: 1px solid var(--input-border); border-radius: 8px; background: var(--input-bg); color: var(--text-color); outline: none; margin-top: 15px;
 margin-bottom: 5px;">
-          <option value="">Number of tires</option> <option value="one tire">one tire</option>
-          <option value="two tires">two tires</option>
-          <option value="three tires">three tires</option>
-          <option value="four tires">four tires</option>
-        </select>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+            <option value="">Number of tires</option> <option value="one tire">one tire</option>
+            <option value="two tires">two tires</option>
+            <option value="three tires">three tires</option>
+            <option value="four tires">four tires</option>
+          </select>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Tow-in Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,otherConcern,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Tow-in Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,otherConcern,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] will be towing in their [[vehicle]] – [[vin]].
 The customer stated that [[otherConcern]]. The customer has been informed that same-day service for tow-ins cannot be guaranteed.
 You may reach the customer at [[phoneNumber]]. Please contact and assist at your earliest convenience.
 Thank you!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Update DMS Appointment Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,service,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Update DMS Appointment Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,schedule,service,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] has scheduled an appointment for their [[vehicle]] – [[vin]], for the following service: [[service]], scheduled at [[schedule]].
 We request to cancel the existing DMS appointment for this customer.
 You may reach the customer at [[phoneNumber]] Please contact and assist at your earliest convenience.
 Thank elloou!"></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3 onclick="toggleCard(this)">
-        Valet Request Alert
-        <span class="toggle-icon">+</span>
-      </h3>
-      <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,service,phoneNumber">
-        <div class="template-output preview" data-template="Good day,
+      <div class="card">
+        <h3 onclick="toggleCard(this)">
+          Valet Request Alert
+          <span class="toggle-icon">+</span>
+        </h3>
+        <div class="card-content" data-required="customerTitle,customerName,vehicle,vin,service,phoneNumber">
+          <div class="template-output preview" data-template="Good day,
 [[customerTitle]] [[customerName]] is looking to schedule a valet appointment for their [[vehicle]] – [[vin]] with the following service: [[service]].
 You may reach the customer at [[phoneNumber]]. Please contact and assist at your earliest convenience.
 Thank you."></div>
-        <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
-        <div class="warning"></div>
+          <button class="copy-btn" onclick="copyTemplate(this)">Copy</button>
+          <div class="warning"></div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div id="themeToggleSwitch" class="theme-toggle-switch">
-    <div class="handle"></div>
-    <svg class="icon sun" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-    <svg class="icon moon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
   </div>
 
   <script>
@@ -1303,6 +1341,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const cardSearchInput = document.getElementById('cardSearchInput');
   if (cardSearchInput) {
     cardSearchInput.addEventListener('keyup', filterCards);
+    // Initial filter on page load
     filterCards();
   }
 });
