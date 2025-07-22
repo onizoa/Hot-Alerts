@@ -109,8 +109,7 @@
     .logo .icon {
       width: 30px; /* Match font-size of logo text */
       height: 30px; /* Match font-size of logo text */
-      fill: var(--accent-color); /* Inherit accent color */
-      stroke: var(--accent-color); /* Inherit accent color */
+      /* Removed fill and stroke to allow inline SVG styles to take precedence */
       flex-shrink: 0; /* Prevent icon from shrinking */
     }
 
@@ -215,6 +214,7 @@
       padding: 0 40px 40px 40px;
       overflow-y: auto;
       background-color: var(--background-color);
+      scroll-behavior: smooth; /* UPDATED: Added smooth scrolling */
     }
 
     .search-container {
@@ -467,14 +467,12 @@
   <div class="sidebar">
     <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 10px 20px;">
       <div class="logo">
-        <!-- Notepad Icon SVG -->
-        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-          <polyline points="13 2 13 9 20 9"></polyline>
+        <svg class="icon" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" fill="#E0E0E0"></path>
+          <polyline points="13 2 13 9 20 9" stroke="#4A90E2" fill="none"></polyline>
         </svg>
         <span>Hot Alerts</span>
       </div>
-      <!-- Old theme toggle button, now hidden -->
       <button id="themeToggleButton" style="display: none;">
         <div id="lottieIconContainer" style="width: 24px; height: 24px;"></div>
       </button>
@@ -908,7 +906,6 @@ Thank you."></div>
     </div>
   </div>
 
-  <!-- Floating Toggle Switch -->
   <div id="themeToggleSwitch" class="theme-toggle-switch">
     <div class="handle"></div>
     <svg class="icon sun" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -994,6 +991,10 @@ function toggleCard(header) {
     icon.textContent = "−";
     header.setAttribute('aria-expanded', 'true');
     updateCardDisplay(content, true);
+    // UPDATED: Smoothly scroll the opened card into view
+    setTimeout(() => {
+        header.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100); // A small delay can help ensure the scroll happens after the layout shift
   } else {
     content.classList.remove('expanded');
     icon.textContent = "+";
