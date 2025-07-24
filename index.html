@@ -188,28 +188,80 @@
         .copy-btn { margin-top: 16px; padding: 12px 24px; background-color: var(--c-primary); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background-color var(--transition-speed); }
         .copy-btn:hover:not(:disabled) { background-color: var(--c-primary-variant); }
         .copy-btn:disabled { background-color: var(--c-border); color: var(--c-on-surface); opacity: 0.6; cursor: not-allowed; }
-
-        .settings-container { display: none; flex-grow: 1; padding: 40px; overflow-y: auto;}
-        .settings-card { background-color: var(--c-surface); border-radius: 12px; padding: 24px; border: 1px solid var(--c-border); max-width: 600px; margin: auto; }
-        .settings-title { font-size: 22px; font-weight: 700; margin-bottom: 24px; }
-        .setting-item { margin-bottom: 20px; }
         
         .hidden { opacity: 0; visibility: hidden; }
 
-        .settings-image-wrapper {
+        /* --- Settings Page Styles --- */
+        .settings-container {
+            display: none;
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .settings-card {
+            background-color: var(--c-surface);
+            border-radius: 12px;
+            border: 1px solid var(--c-border);
+            max-width: 900px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 40px;
+        }
+        
+        .settings-text-content {
+            flex-basis: 55%;
+        }
+        
+        .settings-image-content {
+            flex-basis: 45%;
             text-align: center;
-            padding-bottom: 50px;
+        }
+
+        .settings-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .setting-item p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--c-on-surface-variant);
+        }
+
+        .setting-item p strong {
+            color: var(--c-on-surface);
+        }
+
+        .settings-button {
+            margin-top: 24px;
+            padding: 12px 24px;
+            background-color: var(--c-primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color var(--transition-speed);
+        }
+
+        .settings-button:hover {
+            background-color: var(--c-primary-variant);
         }
 
         .settings-image {
-            max-width: 150px; /* You can adjust the size if needed */
+            max-width: 200px;
             height: auto;
-            /* This filter turns the image white for the default dark theme */
             filter: brightness(0) invert(1);
             transition: filter var(--transition-speed);
         }
 
-        /* When light-mode is active, this removes the filter to show the original image colors */
         body.light-mode .settings-image {
             filter: none;
         }
@@ -313,15 +365,23 @@
             
         <div class="settings-container" id="settingsPage">
             <div class="settings-card">
-                <h2 class="settings-title">Settings</h2>
 
-                <div class="settings-image-wrapper">
+                <div class="settings-text-content">
+                    <h2 class="settings-title">Settings & Information</h2>
+                    <div class="setting-item">
+                        <p>
+                            <strong>Hot Alert Email Template v2.3</strong><br>
+                            This page contains application information and version details. Use the main interface to generate templates and the theme toggle in the header to switch between light and dark modes.
+                        </p>
+                            <strong>Contents are coming soon...</strong>
+                    </div>
+                    
+                </div>
+
+                <div class="settings-image-content">
                     <img src="./images/Maintenance--Streamline-Manila.png" alt="Maintenance Illustration" class="settings-image">
                 </div>
 
-                <div class="setting-item">
-                    <p><strong>Hot Alert</strong><br>Email Template  v2.3</p>
-                </div>
             </div>
         </div>
     </main>
